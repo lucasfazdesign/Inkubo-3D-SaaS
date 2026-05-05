@@ -1714,6 +1714,7 @@ function loadMesa(id){
   if(m.calc)showResults(m.calc);
   else document.getElementById('results').classList.remove('show');
   updatePreview();
+  if(isViewerActive() && typeof scheduleTextBuild==='function') scheduleTextBuild();
 }
 
 function addMesa(){
@@ -1731,6 +1732,10 @@ function removeMesa(id){
   renderSidebar();
 }
 
+function isViewerActive(){
+  return document.getElementById('tab-viewer')?.classList.contains('active');
+}
+
 function onTextChange(){
   const m=mesas.find(x=>x.id===activeMesaId);
   if(m){
@@ -1739,6 +1744,7 @@ function onTextChange(){
     m.colorBorda=document.getElementById('colorBorda')?.value||'#007a20';
   }
   updatePreview();renderSidebar();
+  if(isViewerActive() && typeof scheduleTextBuild==='function') scheduleTextBuild();
 }
 
 function create3DLetter(char,px,depthPx,colorSurface,colorBorda){
@@ -2318,6 +2324,9 @@ function gerarPDF(){
     textDebounce = setTimeout(buildTextMesh, 180);
   }
 
+  /* expõe para o escopo global (usado por onTextChange / loadMesa) */
+  window.scheduleTextBuild = scheduleTextBuild;
+
   /* ════════════════════════════════════════════
      4. HOOKUP: ouve mudanças nos controles
         (chamado após initViewer)
@@ -2599,7 +2608,7 @@ function gerarPDF(){
       panelView.classList.add('active');
       /* No Viewer, mostra o campo Texto no Customize para alimentar o 3D */
       if (textoSec) textoSec.style.display = '';
-      setTimeout(function () { initViewer(); onResize(); }, 30);
+      setTimeout(function () { initViewer(); onResize(); scheduleTextBuild(); }, 30);
     }
   };
 
