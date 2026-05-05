@@ -1,0 +1,2609 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Inkubo Tecnologia</title>
+
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjMgMjUiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTIyLjg4NzggNC4yMzY2M1YyMC4xODI4TDExLjQ0MjkgMjVMMCAyMC4xODEzVjQuMjM5MjNMMTEuNDU0IDBMMjIuODg3OCA0LjIzNjYzWk0yLjUwNzc2IDE1LjMwMzZMMTAuMTg1NyAxOC41MzY1TDEwLjE4NzIgMTAuMjI4M0wyLjUwNzc2IDYuOTk4MDRWMTUuMzAzNlpNMTIuNjk4OSAxMC4yMjgzTDEyLjcwMDQgMTguNTM2NUwyMC4zNzg0IDE1LjMwMzZWNi45OTgwNEwxMi42OTg5IDEwLjIyODNaTTQuNjc0NTggNS4xODQwNEwxMS40NTQgOC4wMzc5MUwxOC4yMTY5IDUuMTg0MDRMMTEuNDU0IDIuNjc5M0w0LjY3NDU4IDUuMTg0MDRaIiBmaWxsPSIjM2QzNDY1Ii8+PC9zdmc+">
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+/* ── RESET ── */
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+a,button{touch-action:manipulation;}
+
+/* ── KEYBOARD FOCUS (tab only) ── */
+*:focus{outline:none;}
+*:focus-visible{
+  outline:1px solid #3b82f6 !important;
+  outline-offset:2px;
+  box-shadow:none !important;
+}
+
+/* ── DESIGN TOKENS ── */
+:root{
+  --ink-purple:  #7c6fcd;
+  --ink-purple-2:#9b8fe0;
+  --ink-purple-3:#5a4fa8;
+  --ink-rose:    #e8a0c0;
+  --ink-blue:    #a0c0e8;
+  --ink-teal:    #7ecdc8;
+  --ink-amber:   #e8c87a;
+  --bg:          #f0f0f2;
+  --surface:     rgba(255,255,255,0.72);
+  --surface-2:   rgba(255,255,255,0.88);
+  --border:      rgba(0,0,0,0.07);
+  --border-2:    rgba(0,0,0,0.10);
+  --text-1:      #1a1a22;
+  --text-2:      #4a4a58;
+  --text-3:      rgba(0,0,0,0.38);
+  --shadow-sm:   0 2px 8px rgba(100,90,160,0.08);
+  --shadow-md:   0 4px 20px rgba(100,90,160,0.10);
+  --shadow-lg:   0 8px 40px rgba(100,90,160,0.13);
+  --ease-smooth: cubic-bezier(0.25,0.46,0.45,0.94);
+  --ease-spring: cubic-bezier(0.34,1.56,0.64,1);
+  --radius:      14px;
+  --radius-sm:   8px;
+}
+
+/* ── BLOB KEYFRAMES ── */
+@keyframes blob1{
+  0%  {transform:translate(0,0)   scale(1)    rotate(0deg);}
+  25% {transform:translate(80px,-60px) scale(1.1) rotate(5deg);}
+  50% {transform:translate(-40px,80px)  scale(0.92) rotate(-3deg);}
+  75% {transform:translate(60px,30px)  scale(1.06) rotate(4deg);}
+  100%{transform:translate(0,0)   scale(1)    rotate(0deg);}
+}
+@keyframes blob2{
+  0%  {transform:translate(0,0)   scale(1);}
+  30% {transform:translate(-90px,50px) scale(1.08);}
+  65% {transform:translate(60px,-70px) scale(0.95);}
+  100%{transform:translate(0,0)   scale(1);}
+}
+@keyframes blob3{
+  0%  {transform:translate(0,0)   scale(1);}
+  40% {transform:translate(50px,90px)  scale(1.07);}
+  70% {transform:translate(-70px,-30px) scale(1.03);}
+  100%{transform:translate(0,0)   scale(1);}
+}
+@keyframes blob4{
+  0%  {transform:translate(0,0)  scale(1);}
+  50% {transform:translate(-60px,55px) scale(1.09);}
+  100%{transform:translate(0,0)  scale(1);}
+}
+@keyframes fadeSlideIn{
+  from{opacity:0;transform:translateY(6px);}
+  to  {opacity:1;transform:translateY(0);}
+}
+@keyframes pulse-border{
+  0%,100%{box-shadow:0 0 0 0 rgba(124,111,205,0.18);}
+  50%    {box-shadow:0 0 0 4px rgba(124,111,205,0.10);}
+}
+
+html{min-height:100%;scrollbar-width:thin;scrollbar-color:rgba(124,111,205,0.18) transparent;}
+body{
+  min-height:100vh;
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  position:relative;
+  overflow-x:hidden;
+  color:var(--text-1);
+}
+/* Webkit scrollbar global */
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:rgba(124,111,205,0.20);border-radius:4px;}
+::-webkit-scrollbar-thumb:hover{background:rgba(124,111,205,0.35);}
+
+/* ── BLOBS ── */
+.bg-blobs{
+  position:fixed;inset:0;z-index:0;
+  pointer-events:none;overflow:hidden;
+}
+.blob{position:absolute;border-radius:50%;will-change:transform;}
+.blob-1{
+  width:700px;height:700px;top:-140px;left:-120px;
+  background:radial-gradient(circle at 40% 40%, rgba(124,111,205,0.20) 0%, transparent 68%);
+  filter:blur(72px);
+  animation:blob1 26s var(--ease-smooth) infinite;
+}
+.blob-2{
+  width:780px;height:780px;top:5%;right:-180px;
+  background:radial-gradient(circle at 55% 45%, rgba(160,192,232,0.17) 0%, transparent 68%);
+  filter:blur(80px);
+  animation:blob2 32s var(--ease-smooth) infinite;
+}
+.blob-3{
+  width:560px;height:560px;bottom:-60px;left:20%;
+  background:radial-gradient(circle at 50% 50%, rgba(232,160,192,0.14) 0%, transparent 68%);
+  filter:blur(70px);
+  animation:blob3 28s var(--ease-smooth) infinite;
+}
+.blob-4{
+  width:480px;height:480px;bottom:8%;right:8%;
+  background:radial-gradient(circle at 50% 50%, rgba(126,205,200,0.12) 0%, transparent 68%);
+  filter:blur(65px);
+  animation:blob4 34s var(--ease-smooth) infinite;
+}
+.blob-5{
+  width:400px;height:400px;top:38%;left:38%;
+  background:radial-gradient(circle at 50% 50%, rgba(232,200,122,0.09) 0%, transparent 68%);
+  filter:blur(68px);
+  animation:blob2 30s var(--ease-smooth) infinite reverse;
+}
+
+/* ── TOPBAR ── */
+.page,.footer{position:relative;z-index:1;}
+.page > *{position:relative;z-index:10;}
+.topbar{
+  position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;justify-content:center;
+  width:100%;height:52px;
+  padding:0 40px;
+  background:rgba(240,240,242,0.80);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  transition:background .3s var(--ease-smooth);
+}
+.topbar-inner{
+  display:flex;align-items:center;
+  gap:24px;width:100%;max-width:1040px;
+}
+.topbar-logo{flex-shrink:0;display:flex;align-items:center;}
+.topbar-logo svg{width:16px;height:18px;}
+
+.nav{
+  display:flex;align-items:center;gap:4px;
+  flex:1;
+}
+.nav a{
+  display:flex;align-items:center;gap:2px;
+  padding:6px 10px;border-radius:7px;
+  text-decoration:none;
+  transition:background .22s var(--ease-smooth), transform .18s var(--ease-spring);
+}
+.nav a:hover{background:rgba(124,111,205,0.09);transform:translateY(-1px);}
+.nav a:active{transform:scale(0.97);}
+.nav-num{font-size:11px;color:var(--text-3);font-weight:400;}
+.nav-label{font-size:13px;color:var(--text-2);font-weight:500;margin-left:2px;}
+
+.topbar-right{display:flex;align-items:center;gap:8px;margin-left:auto;}
+.user-btn{
+  display:flex;align-items:center;justify-content:center;
+  width:34px;height:34px;border-radius:50%;
+  background:rgba(255,255,255,0.6);
+  border:1px solid var(--border-2);
+  cursor:pointer;flex-shrink:0;
+  transition:background .22s var(--ease-smooth),border-color .22s,transform .18s var(--ease-spring),box-shadow .22s;
+}
+.user-btn:hover{
+  background:rgba(255,255,255,0.9);
+  border-color:rgba(124,111,205,0.35);
+  transform:translateY(-1px);
+  box-shadow:0 2px 10px rgba(124,111,205,0.14);
+}
+.user-btn:active{transform:scale(0.96);}
+.search-wrap{
+  display:flex;align-items:center;gap:8px;
+  padding:8px 14px;
+  border:1px solid var(--border-2);
+  border-radius:22px;
+  background:rgba(255,255,255,0.6);
+  transition:border-color .22s,box-shadow .22s,background .22s;
+  min-width:160px;max-width:220px;
+  flex:0 1 200px;
+}
+.search-wrap:focus-within{
+  border-color:rgba(124,111,205,0.35);
+  box-shadow:0 0 0 3px rgba(124,111,205,0.08);
+  background:rgba(255,255,255,0.9);
+}
+.search-input{
+  background:transparent;border:none;outline:none;flex:1;
+  font-family:'Inter',sans-serif;font-size:13px;color:var(--text-1);min-width:0;
+}
+.search-input::placeholder{color:var(--text-3);}
+
+/* Hamburger (mobile only) */
+.hamburger{
+  display:none;
+  flex-direction:column;justify-content:center;align-items:center;
+  gap:6px;
+  width:36px;height:36px;
+  border:none;background:transparent;cursor:pointer;
+  border-radius:8px;
+  transition:background .2s;
+  flex-shrink:0;
+}
+.hamburger:hover{background:rgba(124,111,205,0.1);}
+.hamburger span{
+  display:block;width:20px;height:2px;
+  background:var(--text-2);border-radius:2px;
+  transition:transform .3s var(--ease-smooth),opacity .3s;
+}
+.hamburger.open span:nth-child(1){transform:translateY(5px) rotate(45deg);}
+.hamburger.open span:nth-child(2){transform:translateY(-5px) rotate(-45deg);}
+
+/* Mobile nav overlay */
+.mobile-nav{
+  display:none;
+  position:fixed;top:52px;left:0;right:0;z-index:99;
+  background:rgba(240,240,242,0.97);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  flex-direction:column;gap:2px;padding:12px 20px 20px;
+  animation:fadeSlideIn .22s var(--ease-smooth);
+}
+.mobile-nav.open{display:flex;}
+.mobile-nav a{
+  display:flex;align-items:center;gap:8px;
+  padding:12px 14px;border-radius:10px;text-decoration:none;
+  color:var(--text-1);font-size:15px;font-weight:500;
+  transition:background .2s;
+}
+.mobile-nav a:hover{background:rgba(124,111,205,0.08);}
+.mobile-nav a .nav-num{font-size:13px;color:var(--text-3);}
+
+/* ── PAGE LAYOUT ── */
+.page{
+  display:flex;flex-direction:row;justify-content:center;align-items:flex-start;
+  padding:40px;gap:16px;
+  width:100%;min-height:calc(100vh - 64px - 80px);
+}
+
+/* ── LEFT CARD ── */
+.left-card{
+  display:flex;flex-direction:row;align-items:stretch;
+  padding:18px;gap:16px;
+  width:710px;min-height:520px;
+  border:none;
+  border-radius:var(--radius);
+  flex-shrink:0;
+  background:var(--surface);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  box-shadow:var(--shadow-md);
+  transition:box-shadow .3s var(--ease-smooth);
+  z-index:10;
+  overflow:visible;
+}
+.left-card:hover{box-shadow:var(--shadow-lg);}
+.left-card-inner{flex:1;display:flex;flex-direction:column;gap:14px;min-width:0;min-height:0;}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  display:flex;flex-direction:column;align-items:center;
+  gap:10px;width:136px;flex-shrink:0;
+  padding:4px 2px;
+}
+.sidebar-title-wrap{
+  display:flex;justify-content:center;align-items:center;
+  width:100%;padding:7px 10px;
+  border:1px solid var(--border-2);
+  border-radius:var(--radius-sm);
+  background:rgba(124,111,205,0.06);
+}
+.sidebar-title{font-weight:600;font-size:12px;color:var(--ink-purple-3);letter-spacing:.3px;}
+
+/* sidebar scrollable vertically, no horizontal overflow */
+.sidebar-row{
+  width:100%;
+  overflow-y:auto;
+  overflow-x:hidden;
+  max-height:calc(100vh - 200px);
+  scrollbar-width:thin;
+  scrollbar-color:rgba(124,111,205,0.15) transparent;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  padding:2px 2px 4px 2px;
+}
+.sidebar-row::-webkit-scrollbar{width:3px;}
+.sidebar-row::-webkit-scrollbar-thumb{background:rgba(124,111,205,0.18);border-radius:3px;}
+
+#mesaList{
+  display:flex;flex-direction:column;gap:12px;width:100%;
+}
+
+.mesa-thumb{
+  display:flex;flex-direction:column;align-items:center;
+  padding:9px 7px 7px;gap:5px;
+  width:100%;
+  background:rgba(255,255,255,0.65);
+  border-radius:10px;
+  position:relative;cursor:pointer;
+  border:none;
+  box-shadow:var(--shadow-sm);
+  transition:background .22s var(--ease-smooth),
+             box-shadow .22s var(--ease-smooth),
+             transform .18s var(--ease-spring);
+  flex-shrink:0;
+}
+.mesa-thumb:hover{
+  background:rgba(255,255,255,0.92);
+  box-shadow:var(--shadow-md);
+  transform:translateY(-2px);
+}
+.mesa-thumb.active{
+  background:#fff;
+  box-shadow:var(--shadow-md), 0 0 0 3px rgba(124,111,205,0.08);
+  transform:translateY(-1px);
+}
+
+.mesa-x{
+  position:absolute;top:5px;right:5px;
+  display:flex;align-items:center;justify-content:center;
+  width:14px;height:14px;
+  border:1px solid rgba(160,160,160,0.35);
+  border-radius:999px;
+  background:rgba(255,255,255,0.5);
+  cursor:pointer;
+  transition:background .2s,border-color .2s,transform .18s var(--ease-spring);
+  flex-shrink:0;
+}
+.mesa-x:hover{
+  background:rgba(200,60,60,0.18);
+  border-color:rgba(200,60,60,0.4);
+  transform:scale(1.2);
+}
+.mesa-x svg{width:6px;height:6px;}
+
+.mesa-plate-wrap{width:74px;height:60px;position:relative;flex-shrink:0;}
+.mesa-plate-wrap>svg{width:100%;height:100%;}
+.mesa-mini-letters{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-52%);
+  display:flex;gap:1px;flex-wrap:wrap;
+  align-items:center;justify-content:center;
+  width:56px;padding:2px;
+}
+.mesa-mini-letter{
+  background:none;font-size:9px;font-weight:900;color:#00ff41;
+  display:flex;align-items:center;justify-content:center;
+  min-width:7px;height:12px;padding:0 1px;
+  text-shadow:0 0 4px #00ff4188;
+}
+
+.mesa-name-input{
+  font-family:'Inter',sans-serif;font-weight:600;font-size:10px;color:var(--text-2);
+  text-align:center;background:transparent;border:none;outline:none;
+  width:100%;padding:2px 4px;border-radius:4px;
+  transition:background .18s;cursor:text;
+}
+.mesa-name-input:hover{background:rgba(124,111,205,0.07);}
+.mesa-name-input:focus{background:rgba(124,111,205,0.10);outline:1.5px solid rgba(124,111,205,0.28);}
+
+.mesa-status{
+  font-family:'Inter',sans-serif;font-weight:400;font-size:8px;
+  color:var(--text-3);text-align:center;line-height:1;
+}
+.mesa-status.calculado{color:#2d9a62;font-weight:600;}
+
+.add-btn{
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  gap:6px;
+  width:100%;height:40px;
+  background:rgba(124,111,205,0.07);
+  border-radius:var(--radius-sm);
+  border:1.5px dashed rgba(124,111,205,0.25);
+  cursor:pointer;
+  transition:background .22s var(--ease-smooth),
+             border-color .22s,
+             transform .18s var(--ease-spring),
+             box-shadow .22s;
+  flex-shrink:0;
+}
+.add-btn:hover{
+  background:rgba(124,111,205,0.12);
+  border-color:rgba(124,111,205,0.40);
+  transform:translateY(-2px);
+  box-shadow:var(--shadow-sm);
+}
+.add-btn:active{transform:scale(0.96);}
+
+/* ── PREVIEW 3D ── */
+.preview-area{
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  padding:18px;gap:10px;flex:1;align-self:stretch;
+  background:#1c1b20;
+  border-radius:10px;
+  position:relative;overflow:hidden;
+  perspective:900px;perspective-origin:50% 20%;
+  box-shadow:inset 0 2px 12px rgba(0,0,0,0.32);
+}
+
+/* grade 3D perspectivada — mesma transform da mesa */
+#preview-grid{
+  position:absolute;
+  width:600px;height:600px;
+  transform:rotateX(52deg) rotateZ(-38deg) scale(0.72);
+  transform-origin:center center;
+  transform-style:preserve-3d;
+  pointer-events:none;
+  z-index:0;
+  top:50%;left:50%;
+  margin-top:-300px;margin-left:-300px;
+}
+#preview-grid svg{width:100%;height:100%;}
+
+/* limite visual da mesa — mesma perspectiva */
+#bed-boundary{
+  position:absolute;
+  width:260px;height:260px;
+  transform:rotateX(52deg) rotateZ(-38deg) scale(0.72);
+  transform-origin:center center;
+  transform-style:preserve-3d;
+  pointer-events:none;
+  z-index:2;
+  top:50%;left:50%;
+  margin-top:-130px;margin-left:-130px;
+}
+#bed-boundary svg{width:100%;height:100%;}
+
+.mesa-name-label{
+  position:absolute;top:12px;left:16px;
+  font-size:12px;color:rgba(255,255,255,0.5);
+  z-index:10;font-weight:500;
+}
+.plate-container{
+  position:relative;width:393px;height:420px;
+  transform-style:preserve-3d;
+  transform:rotateX(52deg) rotateZ(-38deg) scale(0.72);
+  flex-shrink:0;margin-top:10px;
+  z-index:1;
+}
+.plate-container>svg{
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  filter:drop-shadow(0 4px 14px rgba(0,0,0,0.22));
+}
+.letter-preview{
+  position:absolute;top:50%;left:52%;
+  display:flex;flex-direction:column;gap:6px;
+  align-items:center;justify-content:center;
+  transform:translate(-50%,-50%) translateZ(4px);
+  transform-style:preserve-3d;
+  width:260px;
+  max-width:260px;
+  overflow:hidden;
+}
+.letter-preview-row{
+  display:flex;gap:0px;flex-wrap:nowrap;
+  align-items:flex-end;
+  justify-content:center;
+  transform-style:preserve-3d;
+  max-width:260px;
+  overflow:hidden;
+}
+.letter-block{
+  display:flex;align-items:center;justify-content:center;
+  font-weight:900;transition:all .3s;
+  backface-visibility:hidden;background:none;border-radius:0;user-select:none;
+}
+.letter-3d-wrap{
+  position:relative;transform-style:preserve-3d;
+  display:inline-flex;flex-shrink:0;
+}
+.bed-dims{
+  position:absolute;bottom:10px;right:0;left:0;text-align:center;
+  font-size:10px;color:rgba(255,255,255,0.22);
+  text-transform:lowercase;z-index:10;
+}
+
+/* ── RIGHT PANEL ── */
+.right-panel{
+  display:flex;flex-direction:column;align-items:stretch;
+  gap:0;width:288px;align-self:flex-start;flex-shrink:0;
+}
+.customize-card{
+  display:flex;flex-direction:column;
+  padding:18px;gap:14px;width:100%;
+  background:var(--surface);
+  border-radius:var(--radius);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  border:none;
+  box-shadow:var(--shadow-md);
+  z-index:10;
+  position:relative;
+}
+.panel-header{
+  display:flex;justify-content:space-between;align-items:center;
+  padding-bottom:14px;
+  border-bottom:1px solid var(--border);
+}
+.panel-title{font-weight:700;font-size:15px;color:var(--text-1);}
+
+.pdf-btn{
+  display:flex;align-items:center;justify-content:center;
+  padding:6px 12px;gap:6px;
+  background:rgba(124,111,205,0.10);
+  border-radius:7px;border:1px solid rgba(124,111,205,0.18);
+  cursor:pointer;
+  font-family:'Inter',sans-serif;font-weight:500;font-size:13px;
+  color:var(--ink-purple-3);
+  transition:background .22s var(--ease-smooth),
+             border-color .22s,
+             transform .18s var(--ease-spring),
+             box-shadow .22s;
+  white-space:nowrap;
+}
+.pdf-btn:hover{
+  background:rgba(124,111,205,0.17);
+  border-color:rgba(124,111,205,0.32);
+  transform:translateY(-1px);
+  box-shadow:0 2px 10px rgba(124,111,205,0.14);
+}
+.pdf-btn:active{transform:scale(0.96);}
+.pdf-btn.saving{opacity:.55;pointer-events:none;}
+.pdf-btn.done{
+  background:rgba(45,154,98,0.12);
+  border-color:rgba(45,154,98,0.28);
+  color:#2d9a62;
+}
+
+/* Accordion */
+.acc-section{width:100%;padding-bottom:14px;border-bottom:1px solid var(--border);}
+.acc-section:last-of-type{border-bottom:none;padding-bottom:0;}
+.acc-header{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:20px;width:100%;cursor:pointer;user-select:none;
+  padding:2px 0;
+  transition:opacity .2s;
+}
+.acc-header:hover{opacity:.75;}
+.acc-header-title{font-size:13px;color:var(--text-2);font-weight:500;}
+.acc-chevron{
+  width:16px;height:16px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  transition:transform .28s var(--ease-smooth);
+  border-radius:4px;
+}
+.acc-chevron.open{transform:rotate(180deg);}
+.acc-body{
+  display:flex;flex-direction:column;align-items:flex-start;
+  gap:8px;margin-top:10px;width:100%;
+  animation:fadeSlideIn .22s var(--ease-smooth);
+}
+.acc-body.hidden{display:none;}
+
+/* Inputs */
+.ink-input-wrap{
+  display:flex;align-items:center;
+  padding:9px 12px;gap:10px;width:100%;min-height:36px;
+  background:rgba(255,255,255,0.75);
+  border:1px solid var(--border-2);
+  border-radius:var(--radius-sm);
+  transition:border-color .22s,box-shadow .22s,background .22s;
+}
+.ink-input-wrap:focus-within{
+  border-color:rgba(124,111,205,0.35);
+  box-shadow:0 0 0 3px rgba(124,111,205,0.07);
+  background:rgba(255,255,255,0.95);
+}
+.ink-label{font-size:13px;color:var(--text-2);white-space:nowrap;font-weight:400;}
+.ink-value{font-size:13px;color:var(--text-3);}
+.ink-input-raw{
+  background:transparent;border:none;outline:none;
+  font-family:'Inter',sans-serif;font-size:13px;color:var(--text-1);
+  width:100%;min-width:0;
+}
+.ink-input-raw::placeholder{color:var(--text-3);}
+.ink-select{
+  background:transparent;border:none;outline:none;
+  font-family:'Inter',sans-serif;font-size:13px;color:var(--text-1);
+  width:100%;cursor:pointer;
+}
+.ink-select option{background:#fff;color:#1a1a1a;}
+
+/* Color pickers side by side */
+.color-row{
+  display:flex;gap:8px;width:100%;
+}
+.color-item{
+  flex:1;display:flex;align-items:center;gap:8px;
+  padding:8px 10px;
+  background:rgba(255,255,255,0.75);
+  border:1px solid var(--border-2);border-radius:var(--radius-sm);
+  transition:border-color .22s,box-shadow .22s;
+}
+.color-item:focus-within{
+  border-color:rgba(124,111,205,0.35);
+  box-shadow:0 0 0 3px rgba(124,111,205,0.07);
+}
+.color-label{font-size:11px;color:var(--text-3);white-space:nowrap;flex:1;}
+input[type="color"]{
+  width:28px;height:20px;border:none;background:transparent;
+  cursor:pointer;border-radius:3px;padding:0;flex-shrink:0;
+}
+
+/* Field hint */
+.field-hint{
+  display:none;font-size:11px;color:#c47030;
+  line-height:1.4;padding:4px 8px;margin-top:-4px;
+  background:rgba(196,112,48,0.08);
+  border-radius:6px;width:100%;
+}
+.field-hint.visible{display:block;}
+.field-hint.info{color:#4a7fba;background:rgba(74,127,186,0.08);}
+
+/* Results */
+.results-box{
+  width:100%;background:rgba(124,111,205,0.05);
+  border:1px solid rgba(124,111,205,0.12);
+  border-radius:10px;padding:12px;
+  display:none;flex-direction:column;gap:7px;
+  animation:fadeSlideIn .25s var(--ease-smooth);
+}
+.results-box.show{display:flex;}
+.result-title{font-size:10px;color:var(--ink-purple);text-transform:uppercase;letter-spacing:.8px;margin-bottom:2px;font-weight:600;}
+.result-row{display:flex;justify-content:space-between;align-items:baseline;}
+.result-label{font-size:12px;color:var(--text-3);}
+.result-value{font-size:13px;font-weight:500;color:var(--text-2);}
+.result-value.big{font-size:18px;font-weight:700;color:var(--text-1);}
+.result-divider{height:1px;background:rgba(124,111,205,0.10);margin:3px 0;}
+
+/* Toast */
+.toast{
+  background:rgba(45,154,98,0.10);
+  border:1px solid rgba(45,154,98,0.22);
+  color:#2d9a62;font-size:12px;
+  border-radius:8px;padding:8px 12px;text-align:center;
+  display:none;font-family:'Inter',sans-serif;width:100%;font-weight:500;
+  animation:fadeSlideIn .22s var(--ease-smooth);
+}
+.toast.show{display:block;}
+
+/* Calcular button */
+.calc-row{
+  display:flex;align-items:center;
+  padding:5px 5px 5px 16px;gap:8px;width:100%;
+  background:linear-gradient(135deg, var(--ink-purple-3) 0%, var(--ink-purple) 100%);
+  border-radius:999px;
+  border:none;cursor:pointer;
+  box-shadow:0 3px 14px rgba(90,79,168,0.22);
+  transition:box-shadow .25s var(--ease-smooth),
+             transform .18s var(--ease-spring),
+             filter .25s;
+}
+.calc-row:hover{
+  box-shadow:0 6px 22px rgba(90,79,168,0.30);
+  transform:translateY(-2px);
+  filter:brightness(1.06);
+}
+.calc-row:active{transform:scale(0.97);box-shadow:0 2px 8px rgba(90,79,168,0.18);}
+.calc-label{
+  flex:1;font-family:'Inter',sans-serif;font-weight:600;font-size:13px;
+  color:rgba(255,255,255,0.95);text-transform:uppercase;letter-spacing:.8px;
+}
+.calc-arrow-btn{
+  display:flex;align-items:center;justify-content:center;
+  width:32px;height:32px;
+  background:rgba(255,255,255,0.18);border-radius:999px;
+  border:none;cursor:pointer;
+  transition:background .2s;flex-shrink:0;
+}
+.calc-row:hover .calc-arrow-btn{background:rgba(255,255,255,0.26);}
+
+/* ── FOOTER ── */
+.footer{
+  width:100%;
+  padding:22px 40px;
+  display:flex;
+  align-items:center;
+  justify-content:space-around;
+  flex-wrap:wrap;
+  gap:14px;
+  border-top:1px solid var(--border);
+  background:rgba(240,240,242,0.88);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  font-family:'Inter',sans-serif;
+}
+.footer-brand{display:none;}
+.footer-logo{display:none;}
+.footer-copy{font-size:11px;color:var(--text-3);text-align:center;}
+.footer-links{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;}
+.footer-links a{
+  font-size:11px;color:var(--text-3);text-decoration:none;
+  transition:color .22s;padding:2px 0;
+}
+.footer-links a:hover{color:var(--ink-purple);}
+.footer-tagline{display:none;}
+
+/* ═══════════════════════════════
+   RESPONSIVIDADE
+═══════════════════════════════ */
+
+/* ── TABLET ≤1100px ── */
+@media(max-width:1100px){
+  .page{
+    flex-direction:column;align-items:center;
+    padding:24px 20px 32px;gap:16px;
+  }
+  .left-card{width:100%;max-width:740px;min-height:auto;}
+  .right-panel{width:100%;max-width:740px;align-self:center;}
+  .customize-card{width:100%;}
+}
+
+/* ── MOBILE ≤700px — hamburger entra ── */
+@media(max-width:700px){
+
+  /* Topbar */
+  .topbar{height:48px;padding:0 16px;}
+  .topbar-inner{gap:10px;height:48px;}
+  .nav,.search-wrap{display:none;}
+  .hamburger{display:flex;}
+
+  /* mobile-nav z-index fix */
+  .mobile-nav{top:48px;}
+
+  /* Page */
+  .page{padding:12px 12px 24px;gap:12px;}
+
+  /* Left card coluna */
+  .left-card{
+    flex-direction:column;padding:12px;gap:12px;
+    border-radius:12px;min-height:auto;
+    align-items:stretch;
+  }
+
+  /* Sidebar: título acima, itens em grid wrap */
+  .sidebar{
+    flex-direction:column;
+    width:100%;gap:8px;
+    align-items:stretch;
+    padding:0;
+  }
+  .sidebar-title-wrap{
+    width:100%;justify-content:flex-start;
+    padding:7px 12px;
+  }
+
+  /* mesa list + add btn na mesma linha, wrap sem scroll horizontal */
+  .sidebar-row{
+    display:flex;flex-direction:row;
+    align-items:flex-start;
+    flex-wrap:wrap;
+    gap:8px;
+    overflow:visible;
+    max-height:none;
+    padding:0;
+  }
+
+  #mesaList{
+    display:flex !important;
+    flex-direction:row !important;
+    flex-wrap:wrap !important;
+    width:auto !important;
+    gap:8px;
+    flex:1;
+  }
+
+  .mesa-thumb{width:90px;flex-shrink:0;padding:8px 6px 6px;gap:4px;}
+  .mesa-plate-wrap{width:58px;height:48px;}
+  .mesa-mini-letter{font-size:7px;min-width:5px;height:9px;}
+
+  .add-btn{
+    width:90px;
+    height:auto;
+    min-height:80px;
+    flex-shrink:0;
+    border-radius:10px;
+    padding:0;
+    align-self:flex-start;
+  }
+  .add-btn svg{width:18px;height:18px;}
+
+  /* Preview */
+  .preview-area{min-height:210px;border-radius:10px;padding:12px;}
+  .plate-container{
+    transform:rotateX(52deg) rotateZ(-38deg) scale(0.44);
+    margin-top:-30px;
+  }
+
+  /* Right */
+  .right-panel{width:100%;align-self:auto;}
+  .customize-card{padding:14px;gap:12px;border-radius:12px;}
+  .panel-title{font-size:14px;}
+  .pdf-btn{font-size:12px;padding:5px 10px;}
+  .acc-header-title{font-size:13px;}
+  .ink-input-wrap{padding:8px 10px;}
+  .ink-label,.ink-input-raw,.ink-select{font-size:12px;}
+  .color-label{font-size:10px;}
+  .calc-label{font-size:12px;}
+
+  /* Footer */
+  .footer{
+    padding:20px 16px 24px;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    gap:14px;
+  }
+  .footer-brand{justify-content:center;}
+  .footer-links{flex-wrap:wrap;gap:12px;justify-content:center;}
+  .footer-tagline{text-align:center;}
+  .footer-copy{text-align:center;width:100%;}
+}
+
+/* ── MOBILE PEQUENO ≤420px ── */
+@media(max-width:420px){
+  .topbar-inner{gap:8px;}
+  .page{padding:10px 10px 20px;}
+  .left-card{padding:10px;gap:10px;}
+  .mesa-thumb{width:80px;}
+  .mesa-plate-wrap{width:50px;height:42px;}
+  .preview-area{min-height:180px;}
+  .plate-container{
+    transform:rotateX(52deg) rotateZ(-38deg) scale(0.36);
+    margin-top:-40px;
+  }
+  .customize-card{padding:12px;gap:10px;}
+  .ink-label,.ink-input-raw,.ink-select{font-size:11px;}
+  .footer{padding:16px 14px 20px;}
+}
+
+/* ── MOBILE MUITO PEQUENO ≤360px ── */
+@media(max-width:360px){
+  .plate-container{
+    transform:rotateX(52deg) rotateZ(-38deg) scale(0.30);
+    margin-top:-50px;
+  }
+  .preview-area{min-height:160px;}
+}
+
+/* ── VIEW TABS ── */
+.view-tabs{
+  display:flex;gap:4px;
+  padding:0 0 14px 0;
+  border-bottom:1px solid var(--border);
+  margin-bottom:0;
+  flex-shrink:0;
+}
+.view-tab{
+  display:flex;align-items:center;gap:6px;
+  padding:6px 13px;border-radius:8px;
+  font-family:'Inter',sans-serif;font-size:12px;font-weight:500;
+  color:var(--text-2);background:transparent;border:none;cursor:pointer;
+  transition:background .2s var(--ease-smooth),color .2s;
+}
+.view-tab:hover{background:rgba(124,111,205,0.08);color:var(--ink-purple-3);}
+.view-tab.active{
+  background:rgba(124,111,205,0.13);
+  color:var(--ink-purple-3);
+  font-weight:600;
+}
+.view-tab svg{flex-shrink:0;opacity:.7;}
+.view-tab.active svg{opacity:1;}
+
+/* ── 3D GLB VIEWER PANEL ── */
+.viewer-panel{
+  display:none;
+  flex:1;align-self:stretch;
+  border-radius:10px;
+  overflow:hidden;
+  position:relative;
+  background:#1c1b20;
+  min-height:300px;
+}
+.viewer-panel.active{display:flex;flex-direction:column;}
+
+/* canvas do Three.js ocupa todo o painel */
+#glb-canvas-wrap{
+  position:absolute;inset:0;
+  z-index:0;
+}
+#glb-canvas-wrap canvas{
+  display:block;width:100%!important;height:100%!important;
+}
+
+/* loading do viewer */
+#glb-loading{
+  position:absolute;inset:0;z-index:30;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:#1c1b20;
+  transition:opacity .5s,visibility .5s;
+}
+#glb-loading.hidden{opacity:0;visibility:hidden;pointer-events:none;}
+.glb-loader-ring{
+  width:40px;height:40px;
+  border:2px solid rgba(255,255,255,0.12);
+  border-top-color:var(--ink-purple-2);
+  border-radius:50%;
+  animation:spin 0.9s linear infinite;
+  margin-bottom:12px;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+.glb-loader-text{
+  font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(255,255,255,0.38);font-family:'Inter',sans-serif;
+}
+
+/* info badge top-left */
+#glb-info{
+  position:absolute;top:12px;left:14px;z-index:10;pointer-events:none;
+}
+#glb-info .glb-label{
+  font-size:9px;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(255,255,255,0.3);font-family:'Inter',sans-serif;
+}
+#glb-model-name{
+  font-size:11px;font-weight:600;color:rgba(255,255,255,0.7);
+  font-family:'Inter',sans-serif;margin-top:2px;letter-spacing:.02em;
+}
+
+/* botão auto-rotate top-right */
+#glb-btn-rotate{
+  position:absolute;top:10px;right:10px;z-index:10;
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,0.13);
+  border-radius:7px;padding:5px 10px;
+  font-family:'Inter',sans-serif;font-size:9px;letter-spacing:.12em;
+  text-transform:uppercase;color:rgba(255,255,255,0.45);
+  cursor:pointer;transition:background .2s,color .2s;
+}
+#glb-btn-rotate:hover{background:rgba(255,255,255,0.14);color:rgba(255,255,255,0.8);}
+#glb-btn-rotate.active{
+  background:var(--ink-purple);color:#fff;
+  border-color:var(--ink-purple);
+}
+
+/* barra de dicas bottom */
+#glb-controls-bar{
+  position:absolute;bottom:12px;left:50%;transform:translateX(-50%);z-index:10;
+  display:flex;gap:6px;align-items:center;
+  background:rgba(0,0,0,0.35);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:30px;padding:5px 14px;
+  white-space:nowrap;
+}
+.glb-hint{
+  font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(255,255,255,0.38);font-family:'Inter',sans-serif;
+  display:flex;align-items:center;gap:4px;
+}
+.glb-hint+.glb-hint::before{
+  content:'';display:block;width:1px;height:10px;
+  background:rgba(255,255,255,0.15);margin-right:2px;
+}
+
+/* drop zone do viewer */
+#glb-drop-zone{
+  position:absolute;inset:0;z-index:20;
+  display:flex;align-items:center;justify-content:center;
+  pointer-events:none;transition:opacity .35s;
+}
+#glb-drop-zone.hidden{opacity:0;visibility:hidden;pointer-events:none;}
+#glb-drop-zone.hidden *{pointer-events:none;}
+.glb-dz-box{
+  pointer-events:all;
+  border:1.5px dashed rgba(124,111,205,0.35);
+  border-radius:12px;padding:28px 36px;text-align:center;
+  background:rgba(28,27,32,0.75);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  cursor:pointer;transition:border-color .2s,background .2s;
+}
+.glb-dz-box:hover,#glb-drop-zone.drag-over .glb-dz-box{
+  border-color:var(--ink-purple-2);
+  background:rgba(40,36,60,0.85);
+}
+.glb-dz-icon{font-size:28px;margin-bottom:8px;}
+.glb-dz-title{
+  font-size:12px;font-weight:600;color:rgba(255,255,255,0.7);
+  font-family:'Inter',sans-serif;margin-bottom:8px;letter-spacing:.03em;
+}
+.glb-dz-sub{
+  display:flex;gap:5px;flex-wrap:wrap;justify-content:center;
+  font-family:'Inter',sans-serif;
+}
+.glb-fmt-badge{
+  font-size:8px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;
+  padding:2px 6px;border-radius:4px;
+  border:1px solid rgba(124,111,205,0.35);
+  color:rgba(180,170,230,0.85);
+  background:rgba(124,111,205,0.12);
+}
+#glb-file-input{display:none;}
+
+/* ocultar preview-area quando viewer ativo */
+.preview-area.hidden-tab{display:none!important;}
+
+@media(max-width:600px){
+  #glb-controls-bar{display:none;}
+  #glb-info{top:8px;left:10px;}
+  #glb-btn-rotate{top:8px;right:8px;font-size:8px;padding:4px 8px;}
+  .glb-dz-box{padding:20px 24px;margin:0 16px;}
+}
+
+/* ── LOGIN MODAL ── */
+@keyframes loginFadeIn{
+  from{opacity:0;transform:translateY(18px) scale(0.97);}
+  to  {opacity:1;transform:translateY(0) scale(1);}
+}
+@keyframes overlayIn{
+  from{opacity:0;}
+  to  {opacity:1;}
+}
+.login-overlay{
+  display:none;
+  position:fixed;inset:0;z-index:999;
+  background:rgba(0,0,0,0.35);
+  backdrop-filter:blur(28px);
+  -webkit-backdrop-filter:blur(28px);
+  align-items:center;justify-content:center;
+  animation:overlayIn .3s var(--ease-smooth);
+}
+.login-overlay.open{display:flex;}
+.login-box{
+  width:340px;max-width:calc(100vw - 40px);
+  background:rgba(255,255,255,0.78);
+  backdrop-filter:blur(40px) saturate(1.6);
+  -webkit-backdrop-filter:blur(40px) saturate(1.6);
+  border-radius:20px;
+  padding:40px 36px 32px;
+  display:flex;flex-direction:column;align-items:center;gap:0;
+  box-shadow:0 24px 80px rgba(0,0,0,0.18), 0 0 0 0.5px rgba(255,255,255,0.6) inset;
+  animation:loginFadeIn .35s var(--ease-spring);
+  position:relative;
+}
+.login-close{
+  position:absolute;top:16px;right:16px;
+  width:28px;height:28px;border-radius:50%;
+  background:rgba(0,0,0,0.06);
+  border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:background .2s;
+}
+.login-close:hover{background:rgba(0,0,0,0.12);}
+.login-logo{
+  width:44px;height:44px;margin-bottom:18px;
+}
+.login-title{
+  font-size:19px;font-weight:600;color:#1a1a22;
+  text-align:center;margin-bottom:6px;letter-spacing:-.3px;
+}
+.login-sub{
+  font-size:13px;color:rgba(0,0,0,0.45);text-align:center;
+  margin-bottom:28px;line-height:1.4;
+}
+.login-field{
+  width:100%;margin-bottom:10px;
+  border:1px solid rgba(0,0,0,0.14);
+  border-radius:10px;
+  background:rgba(255,255,255,0.8);
+  padding:12px 14px;
+  font-family:'Inter',sans-serif;font-size:14px;color:#1a1a22;
+  outline:none;
+  transition:border-color .22s,box-shadow .22s;
+}
+.login-field:focus{
+  border-color:rgba(124,111,205,0.45);
+  box-shadow:0 0 0 3px rgba(124,111,205,0.10);
+}
+.login-field::placeholder{color:rgba(0,0,0,0.35);}
+.login-btn-main{
+  width:100%;margin-top:6px;
+  padding:13px;border-radius:10px;border:none;
+  background:linear-gradient(135deg,var(--ink-purple-3),var(--ink-purple));
+  color:#fff;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;
+  cursor:pointer;letter-spacing:.2px;
+  box-shadow:0 4px 16px rgba(90,79,168,0.25);
+  transition:transform .18s var(--ease-spring),box-shadow .22s,filter .22s;
+}
+.login-btn-main:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(90,79,168,0.3);filter:brightness(1.05);}
+.login-btn-main:active{transform:scale(0.97);}
+.login-divider{
+  display:flex;align-items:center;gap:10px;width:100%;
+  margin:20px 0 16px;
+}
+.login-divider-line{flex:1;height:1px;background:rgba(0,0,0,0.10);}
+.login-divider-text{font-size:12px;color:rgba(0,0,0,0.35);white-space:nowrap;}
+.login-social{
+  display:flex;flex-direction:column;gap:8px;width:100%;
+}
+.login-social-btn{
+  width:100%;padding:11px 14px;border-radius:10px;
+  border:1px solid rgba(0,0,0,0.13);
+  background:rgba(255,255,255,0.85);
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  font-family:'Inter',sans-serif;font-size:13px;font-weight:500;color:#1a1a22;
+  cursor:pointer;
+  transition:background .2s,border-color .2s,transform .18s var(--ease-spring),box-shadow .2s;
+}
+.login-social-btn:hover{
+  background:rgba(255,255,255,0.98);
+  border-color:rgba(0,0,0,0.22);
+  transform:translateY(-1px);
+  box-shadow:0 4px 14px rgba(0,0,0,0.08);
+}
+.login-social-btn:active{transform:scale(0.97);}
+.login-footer-text{
+  font-size:12px;color:rgba(0,0,0,0.35);text-align:center;
+  margin-top:20px;line-height:1.5;
+}
+.login-footer-text a{color:var(--ink-purple);text-decoration:none;}
+.login-footer-text a:hover{text-decoration:underline;}
+</style>
+</head>
+<body>
+
+<div class="bg-blobs">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+  <div class="blob blob-5"></div>
+</div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-logo">
+      <svg viewBox="0 0 23 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M22.8878 4.23663V20.1828L11.4429 25L0 20.1813V4.23923L11.454 0L22.8878 4.23663ZM2.50776 15.3036L10.1857 18.5365L10.1872 10.2283L2.50776 6.99804V15.3036ZM12.6989 10.2283L12.7004 18.5365L20.3784 15.3036V6.99804L12.6989 10.2283ZM4.67458 5.18404L11.454 8.03791L18.2169 5.18404L11.454 2.6793L4.67458 5.18404Z" fill="#3d3465"/>
+      </svg>
+    </div>
+    <nav class="nav">
+      <a href="#"><span class="nav-label">Trabalhos</span></a>
+      <a href="#"><span class="nav-label">Serviços</span></a>
+      <a href="#"><span class="nav-label">Contato</span></a>
+      <a href="#"><span class="nav-label">Sobre</span></a>
+    </nav>
+    <div class="topbar-right">
+      <div class="search-wrap">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="flex-shrink:0;opacity:.45">
+          <circle cx="6" cy="6" r="4.5" stroke="#3d3465" stroke-width="1.5"/>
+          <path d="M10 10L13 13" stroke="#3d3465" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <input class="search-input" type="text" placeholder="Buscar…"/>
+      </div>
+      <button class="user-btn" onclick="openLogin()" aria-label="Entrar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="8" r="4" stroke="#3d3465" stroke-width="1.7"/>
+          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#3d3465" stroke-width="1.7" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <button class="hamburger" id="hamburger" onclick="toggleMobileNav()" aria-label="Menu">
+        <span></span><span></span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav class="mobile-nav" id="mobileNav">
+  <a href="#" onclick="toggleMobileNav()">Trabalhos</a>
+  <a href="#" onclick="toggleMobileNav()">Serviços</a>
+  <a href="#" onclick="toggleMobileNav()">Contato</a>
+  <a href="#" onclick="toggleMobileNav()">Sobre</a>
+</nav>
+
+<div class="page">
+  <div class="left-card">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-title-wrap">
+        <span class="sidebar-title">Projeto</span>
+      </div>
+      <!-- row: mesas + botão add na mesma linha no mobile -->
+      <div class="sidebar-row">
+        <div id="mesaList"></div>
+        <button class="add-btn" onclick="addMesa()" aria-label="Nova mesa">
+          <svg width="20" height="20" viewBox="0 0 26 26" fill="none">
+            <path d="M13 2V24M2 13H24" stroke="#7c6fcd" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- PREVIEW + VIEWER (tabs) -->
+    <div class="left-card-inner">
+
+      <!-- Abas -->
+      <div class="view-tabs">
+        <button class="view-tab active" id="tab-preview" onclick="switchTab('preview')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="3" stroke="#7c6fcd" stroke-width="1.8"/><path d="M8 12l3 3 5-6" stroke="#7c6fcd" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Preview Letras
+        </button>
+        <button class="view-tab" id="tab-viewer" onclick="switchTab('viewer')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 3L21 8V16L12 21L3 16V8L12 3Z" stroke="#7c6fcd" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 3V21M3 8L21 8M3 16L21 16" stroke="#7c6fcd" stroke-width="1.3" stroke-opacity=".5"/></svg>
+          Inkubo Viewer
+        </button>
+      </div>
+
+      <!-- Preview 3D de letras -->
+      <div class="preview-area" id="panel-preview">
+        <div class="mesa-name-label" id="previewName">Mesa - 1</div>
+        
+        <!-- grade perspectivada -->
+        <div id="preview-grid">
+          <svg viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <line x1="0"   y1="0" x2="0"   y2="600" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+            <line x1="30"  y1="0" x2="30"  y2="600" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="60"  y1="0" x2="60"  y2="600" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="90"  y1="0" x2="90"  y2="600" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="120" y1="0" x2="120" y2="600" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="150" y1="0" x2="150" y2="600" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+            <line x1="180" y1="0" x2="180" y2="600" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="210" y1="0" x2="210" y2="600" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="240" y1="0" x2="240" y2="600" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="270" y1="0" x2="270" y2="600" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="300" y1="0" x2="300" y2="600" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+            <line x1="330" y1="0" x2="330" y2="600" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="360" y1="0" x2="360" y2="600" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="390" y1="0" x2="390" y2="600" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="420" y1="0" x2="420" y2="600" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="450" y1="0" x2="450" y2="600" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+            <line x1="480" y1="0" x2="480" y2="600" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="510" y1="0" x2="510" y2="600" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="540" y1="0" x2="540" y2="600" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="570" y1="0" x2="570" y2="600" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="600" y1="0" x2="600" y2="600" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+            <line x1="0" y1="0"   x2="600" y2="0"   stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+            <line x1="0" y1="30"  x2="600" y2="30"  stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="0" y1="60"  x2="600" y2="60"  stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="0" y1="90"  x2="600" y2="90"  stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="0" y1="120" x2="600" y2="120" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="0" y1="150" x2="600" y2="150" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+            <line x1="0" y1="180" x2="600" y2="180" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="0" y1="210" x2="600" y2="210" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="0" y1="240" x2="600" y2="240" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="0" y1="270" x2="600" y2="270" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="0" y1="300" x2="600" y2="300" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+            <line x1="0" y1="330" x2="600" y2="330" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="0" y1="360" x2="600" y2="360" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="0" y1="390" x2="600" y2="390" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="0" y1="420" x2="600" y2="420" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="0" y1="450" x2="600" y2="450" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+            <line x1="0" y1="480" x2="600" y2="480" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="0" y1="510" x2="600" y2="510" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="0" y1="540" x2="600" y2="540" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="0" y1="570" x2="600" y2="570" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="0" y1="600" x2="600" y2="600" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+          </svg>
+        </div>
+
+        <!-- limite visual da mesa 220×220mm -->
+        <div id="bed-boundary">
+          <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="0" width="220" height="220" 
+                  fill="none" 
+                  stroke="rgba(255,80,80,0.25)" 
+                  stroke-width="1.5"/>
+          </svg>
+        </div>
+
+        <div class="plate-container">
+          <svg width="393" height="420" viewBox="0 0 393 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M230.2 0C233.848 -4.08828e-06 237.371 1.32863 240.109 3.73828L244.942 7.99121C247.681 10.4011 251.204 11.7305 254.852 11.7305H377.744C386.028 11.7306 392.744 18.4463 392.744 26.7305V404.934C392.744 413.218 386.028 419.933 377.744 419.934H130.839C126.448 419.933 122.279 418.01 119.429 414.67L114.434 408.815C111.584 405.475 107.413 403.552 103.022 403.552H15.001C6.71671 403.552 0 396.836 0 388.552V26.7305C1.19034e-05 18.4464 6.71596 11.7307 15 11.7305H137.419C141.226 11.7305 144.892 10.2826 147.671 7.68066L151.55 4.04883C154.329 1.44709 157.994 0.000111556 161.801 0H230.2ZM164.572 6.68262C163.879 6.68265 163.317 7.24427 163.317 7.9375C163.317 8.63068 163.879 9.19235 164.572 9.19238H228.172C228.865 9.19238 229.428 8.6307 229.428 7.9375C229.428 7.24425 228.865 6.68262 228.172 6.68262H164.572Z" fill="#3A3A3C"/>
+          </svg>
+          <div class="letter-preview" id="letterPreview">
+            <span style="font-size:13px;color:rgba(255,255,255,0.25);font-family:'Inter',sans-serif;font-weight:300;">visualização aqui</span>
+          </div>
+        </div>
+        <div class="bed-dims">220mm × 220mm</div>
+      </div>
+
+      <!-- Viewer GLB (Three.js) -->
+      <div class="viewer-panel" id="panel-viewer">
+
+        <!-- Canvas Three.js -->
+        <div id="glb-canvas-wrap"></div>
+
+        <!-- Loading -->
+        <div id="glb-loading" class="hidden">
+          <div class="glb-loader-ring"></div>
+          <p class="glb-loader-text">Carregando <span id="glb-load-pct">0</span>%</p>
+        </div>
+
+        <!-- Info (top-left) -->
+        <div id="glb-info">
+          <div class="glb-label">Inkubo Viewer</div>
+          <div id="glb-model-name">—</div>
+        </div>
+
+        <!-- Auto-rotate (top-right) -->
+        <button id="glb-btn-rotate" class="active">⟳ Auto</button>
+
+        <!-- Drop zone -->
+        <div id="glb-drop-zone">
+          <div class="glb-dz-box" id="glb-dz-box">
+            <div class="glb-dz-icon">📦</div>
+            <div class="glb-dz-title">Solte um arquivo 3D aqui</div>
+            <div class="glb-dz-sub">
+              <span class="glb-fmt-badge">STL</span>
+              <span class="glb-fmt-badge">SVG</span>
+            </div>
+          </div>
+        </div>
+        <input type="file" id="glb-file-input" accept=".stl,.svg" />
+
+        <!-- Dicas de controle (bottom) -->
+        <div id="glb-controls-bar">
+          <span class="glb-hint">🖱 Girar</span>
+          <span class="glb-hint">⇕ Zoom</span>
+          <span class="glb-hint">✥ Mover</span>
+        </div>
+
+      </div>
+
+    </div><!-- /left-card-inner -->
+
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="right-panel">
+    <div class="customize-card">
+
+      <div class="panel-header">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="panel-title">Customize</span>
+          <span id="adminBadge" style="display:none;font-size:9px;font-weight:700;letter-spacing:.5px;background:rgba(124,111,205,.18);color:#9b8fe0;border-radius:4px;padding:2px 7px;">ADMIN</span>
+        </div>
+        <button class="pdf-btn" id="pdfBtn" onclick="salvarPDF()">Gerar PDF</button>
+      </div>
+
+      <!-- Texto -->
+      <div class="acc-section" id="accTextoSection">
+        <div class="acc-header" onclick="toggleAcc('accText','chevText')">
+          <span class="acc-header-title">Texto</span>
+          <span class="acc-chevron open" id="chevText">
+            <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="#7c6fcd" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+        <div class="acc-body" id="accText">
+          <div class="ink-input-wrap">
+            <input type="text" class="ink-input-raw" id="textInput" placeholder="Digite o texto…" oninput="onTextChange()"/>
+          </div>
+          <span class="field-hint" id="hint-textInput"></span>
+
+        </div>
+      </div>
+
+      <!-- Cor -->
+      <div class="acc-section" id="accCorSection">
+        <div class="acc-header" onclick="toggleAcc('accCor','chevCor')">
+          <span class="acc-header-title">Cor da Superfície / Borda</span>
+          <span class="acc-chevron open" id="chevCor">
+            <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="#7c6fcd" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+        <div class="acc-body" id="accCor">
+          <div class="color-row">
+            <div class="color-item">
+              <span class="color-label">Superfície</span>
+              <input type="color" id="colorSurface" value="#00ff41" oninput="onTextChange()"/>
+            </div>
+            <div class="color-item">
+              <span class="color-label">Borda</span>
+              <input type="color" id="colorBorda" value="#007a20" oninput="onTextChange()"/>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tamanho -->
+      <div class="acc-section">
+        <div class="acc-header" onclick="toggleAcc('accSize','chevSize')">
+          <span class="acc-header-title">Tamanho / Espessura</span>
+          <span class="acc-chevron open" id="chevSize">
+            <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="#7c6fcd" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+        <div class="acc-body" id="accSize">
+          <div class="ink-input-wrap">
+            <span class="ink-label">Altura</span>
+            <input type="number" class="ink-input-raw" id="altura" value="120" min="10" max="150" oninput="validateAndUpdate('altura',10,150)"/>
+            <span class="ink-value">mm</span>
+          </div>
+          <span class="field-hint" id="hint-altura"></span>
+          <div class="ink-input-wrap">
+            <span class="ink-label">Espessura</span>
+            <input type="number" class="ink-input-raw" id="espessura" value="20" min="1" max="150" oninput="validateAndUpdate('espessura',1,150)"/>
+            <span class="ink-value">mm</span>
+          </div>
+          <span class="field-hint" id="hint-espessura"></span>
+          <!-- campo espaco hidden, valor fixo 0 -->
+          <input type="hidden" id="espaco" value="0"/>
+        </div>
+      </div>
+
+      <!-- Detalhe extra — só admin -->
+      <div id="adminSection" style="display:none;width:100%">
+      <div class="acc-section">
+        <div class="acc-header" onclick="toggleAcc('accExtra','chevExtra')">
+          <span class="acc-header-title">Material / Custo</span>
+          <span class="acc-chevron" id="chevExtra">
+            <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="#7c6fcd" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+        <div class="acc-body hidden" id="accExtra">
+          <div class="ink-input-wrap">
+            <select class="ink-select" id="material">
+              <option value="1.24">PLA (1.24 g/cm³)</option>
+              <option value="1.05">ABS (1.05 g/cm³)</option>
+              <option value="1.27">PETG (1.27 g/cm³)</option>
+            </select>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%">
+            <div class="ink-input-wrap"><input type="number" class="ink-input-raw" id="infill" value="25" min="5" max="100" placeholder="Infill %"/></div>
+            <div class="ink-input-wrap"><input type="number" class="ink-input-raw" id="preco" value="80" min="1" placeholder="R$/kg"/></div>
+          </div>
+          <!-- qtd hidden, valor fixo 1 -->
+          <input type="hidden" id="qtd" value="1"/>
+        </div>
+      </div>
+
+      </div><!-- /adminSection -->
+
+      <div class="results-box" id="results">
+        <div class="result-title">Resultado</div>
+        <div class="result-row"><span class="result-label">Volume estimado</span><span class="result-value" id="rVolume">—</span></div>
+        <div class="result-row"><span class="result-label">Peso por peça</span><span class="result-value" id="rPeso">—</span></div>
+        <div class="result-row"><span class="result-label">Peso total</span><span class="result-value" id="rPesoTotal">—</span></div>
+        <div class="result-divider"></div>
+        <div class="result-row"><span class="result-label">Custo estimado</span><span class="result-value big" id="rCusto">—</span></div>
+      </div>
+
+      <div class="toast" id="toast">PDF gerado com sucesso!</div>
+
+      <div class="calc-row" onclick="calcular()">
+        <span class="calc-label">Calcular</span>
+        <button class="calc-arrow-btn" aria-label="Calcular">
+          <svg width="11" height="11" viewBox="0 0 10 10" fill="none">
+            <path d="M1.5 8.5L8.5 1.5M8.5 1.5H3M8.5 1.5V7" stroke="rgba(255,255,255,0.9)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-brand">
+    <svg class="footer-logo" viewBox="0 0 23 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M22.8878 4.23663V20.1828L11.4429 25L0 20.1813V4.23923L11.454 0L22.8878 4.23663ZM2.50776 15.3036L10.1857 18.5365L10.1872 10.2283L2.50776 6.99804V15.3036ZM12.6989 10.2283L12.7004 18.5365L20.3784 15.3036V6.99804L12.6989 10.2283ZM4.67458 5.18404L11.454 8.03791L18.2169 5.18404L11.454 2.6793L4.67458 5.18404Z"/>
+    </svg>
+    <span class="footer-name">INKUBO TECNOLOGIA</span>
+  </div>
+  <div class="footer-copy">© 2026 Inkubo Tecnologia · Impressão 3D</div>
+  <nav class="footer-links">
+    <a href="#">Trabalhos</a>
+    <a href="#">Serviços</a>
+    <a href="#">Contato</a>
+    <a href="#">Sobre</a>
+  </nav>
+  <div class="footer-tagline">Calculadora de custo para letras caixa em impressão 3D — valores estimados.</div>
+</footer>
+
+<!-- LOGIN MODAL -->
+<div class="login-overlay" id="loginOverlay" onclick="handleOverlayClick(event)">
+  <div class="login-box" id="loginBox">
+    <button class="login-close" onclick="closeLogin()" aria-label="Fechar">
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+        <path d="M1 1L9 9M9 1L1 9" stroke="#666" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+    </button>
+
+    <!-- Logo -->
+    <svg class="login-logo" viewBox="0 0 23 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M22.8878 4.23663V20.1828L11.4429 25L0 20.1813V4.23923L11.454 0L22.8878 4.23663ZM2.50776 15.3036L10.1857 18.5365L10.1872 10.2283L2.50776 6.99804V15.3036ZM12.6989 10.2283L12.7004 18.5365L20.3784 15.3036V6.99804L12.6989 10.2283ZM4.67458 5.18404L11.454 8.03791L18.2169 5.18404L11.454 2.6793L4.67458 5.18404Z" fill="#5a4fa8"/>
+    </svg>
+
+    <div class="login-title">Entrar no Inkubo</div>
+    <div class="login-sub">Use sua conta para acessar todos os recursos</div>
+
+    <input class="login-field" type="email" placeholder="E-mail" autocomplete="email"/>
+    <input class="login-field" type="password" placeholder="Senha" autocomplete="current-password"/>
+
+    <button class="login-btn-main" onclick="doLogin()">Entrar</button>
+
+    <div class="login-divider">
+      <div class="login-divider-line"></div>
+      <span class="login-divider-text">ou continue com</span>
+      <div class="login-divider-line"></div>
+    </div>
+
+    <div class="login-social">
+      <!-- Google -->
+      <button class="login-social-btn" onclick="closeLogin()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+        </svg>
+        Continuar com Google
+      </button>
+      <!-- Apple -->
+      <button class="login-social-btn" onclick="closeLogin()">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
+          <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" fill="#111"/>
+        </svg>
+        Continuar com Apple
+      </button>
+    </div>
+
+    <div class="login-footer-text">
+      Não tem conta? <a href="#" onclick="event.preventDefault()">Criar conta</a><br/>
+      <a href="#" onclick="event.preventDefault()">Esqueceu a senha?</a>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── Hamburger ── */
+function toggleMobileNav(){
+  const nav=document.getElementById('mobileNav');
+  const btn=document.getElementById('hamburger');
+  nav.classList.toggle('open');
+  btn.classList.toggle('open');
+}
+
+/* ── Auth state ── */
+var ADMIN_EMAIL    = 'admin@inkubo.com.br';
+var ADMIN_PASSWORD = 'inkubo@2026';
+var isAdmin = false;
+
+function applyAuthState() {
+  var adminSec   = document.getElementById('adminSection');
+  var adminBadge = document.getElementById('adminBadge');
+  var userBtn    = document.querySelector('.user-btn');
+  if (adminSec)   adminSec.style.display   = isAdmin ? '' : 'none';
+  if (adminBadge) adminBadge.style.display  = isAdmin ? '' : 'none';
+  if (userBtn) {
+    userBtn.title = isAdmin ? 'Admin — clique para sair' : 'Entrar';
+    userBtn.setAttribute('aria-label', isAdmin ? 'Sair' : 'Entrar');
+  }
+}
+
+/* ── Login Modal ── */
+function openLogin(){
+  if (isAdmin) { isAdmin = false; applyAuthState(); return; }
+  document.getElementById('loginOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  /* limpa campos */
+  var fields = document.querySelectorAll('.login-field');
+  fields.forEach(function(f){ f.value=''; f.style.borderColor=''; });
+  var err = document.getElementById('loginError');
+  if (err) err.style.display = 'none';
+}
+function closeLogin(){
+  document.getElementById('loginOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+function handleOverlayClick(e){
+  if(e.target===document.getElementById('loginOverlay'))closeLogin();
+}
+function doLogin(){
+  var fields = document.querySelectorAll('.login-field');
+  var email  = fields[0].value.trim();
+  var pass   = fields[1].value;
+  var err    = document.getElementById('loginError');
+  if (email === ADMIN_EMAIL && pass === ADMIN_PASSWORD) {
+    isAdmin = true;
+    applyAuthState();
+    closeLogin();
+  } else {
+    if (err) { err.textContent = 'E-mail ou senha incorretos.'; err.style.display = 'block'; }
+    fields[0].style.borderColor = '#e05555';
+    fields[1].style.borderColor = '#e05555';
+  }
+}
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape') closeLogin();
+  if(e.key==='Enter' && document.getElementById('loginOverlay').classList.contains('open')) doLogin();
+});
+
+/* ── App data ── */
+const PLATE_MINI=`<svg width="70" height="75" viewBox="0 0 393 420" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M230.2 0C233.848 -4.08828e-06 237.371 1.32863 240.109 3.73828L244.942 7.99121C247.681 10.4011 251.204 11.7305 254.852 11.7305H377.744C386.028 11.7306 392.744 18.4463 392.744 26.7305V404.934C392.744 413.218 386.028 419.933 377.744 419.934H130.839C126.448 419.933 122.279 418.01 119.429 414.67L114.434 408.815C111.584 405.475 107.413 403.552 103.022 403.552H15.001C6.71671 403.552 0 396.836 0 388.552V26.7305C1.19034e-05 18.4464 6.71596 11.7307 15 11.7305H137.419C141.226 11.7305 144.892 10.2826 147.671 7.68066L151.55 4.04883C154.329 1.44709 157.994 0.000111556 161.801 0H230.2ZM164.572 6.68262C163.879 6.68265 163.317 7.24427 163.317 7.9375C163.317 8.63068 163.879 9.19235 164.572 9.19238H228.172C228.865 9.19238 229.428 8.6307 229.428 7.9375C229.428 7.24425 228.865 6.68262 228.172 6.68262H164.572Z" fill="#3A3A3C"/></svg>`;
+
+const charFill={I:0.35,J:0.38,L:0.42,T:0.45,Y:0.48,F:0.52,E:0.55,P:0.58,r:0.52,i:0.32,l:0.33,j:0.35,default:0.68};
+const DEFAULT_COLORS=[
+  {surface:'#00ff41',borda:'#007a20'},
+  {surface:'#ff4444',borda:'#880000'},
+  {surface:'#4488ff',borda:'#002288'},
+  {surface:'#ffcc00',borda:'#886600'},
+  {surface:'#ff44ff',borda:'#880088'},
+  {surface:'#00ffff',borda:'#008888'},
+];
+let mesas=[
+  {id:1,label:'Mesa - 1',text:'',calc:null,colorSurface:'#00ff41',colorBorda:'#007a20'},
+  {id:2,label:'Mesa - 2',text:'',calc:null,colorSurface:'#ff4444',colorBorda:'#880000'},
+];
+let activeMesaId=1,nextId=3,lastCalc=null;
+
+function getCharFill(c){return charFill[c.toUpperCase()]||charFill.default;}
+
+function toggleAcc(bodyId,chevId){
+  const b=document.getElementById(bodyId),c=document.getElementById(chevId);
+  const open=!b.classList.contains('hidden');
+  b.classList.toggle('hidden',open);
+  c.classList.toggle('open',!open);
+}
+
+function renderSidebar(){
+  const list=document.getElementById('mesaList');
+  list.innerHTML='';
+  mesas.forEach(m=>{
+    const div=document.createElement('div');
+    div.className='mesa-thumb'+(m.id===activeMesaId?' active':'');
+    div.onclick=()=>selectMesa(m.id);
+
+    const xBtn=document.createElement('button');
+    xBtn.className='mesa-x';
+    xBtn.innerHTML=`<svg width="6" height="6" viewBox="0 0 10 10" fill="none"><path d="M1 1L9 9M9 1L1 9" stroke="#8D8D90" stroke-width="1.8" stroke-linecap="round"/></svg>`;
+    xBtn.onclick=(e)=>{e.stopPropagation();removeMesa(m.id);};
+
+    const plateWrap=document.createElement('div');
+    plateWrap.className='mesa-plate-wrap';
+    plateWrap.innerHTML=PLATE_MINI;
+
+    const lettersDiv=document.createElement('div');
+    lettersDiv.className='mesa-mini-letters';
+    if(m.text){
+      for(const ch of m.text.slice(0,6)){
+        if(ch===' ')continue;
+        const s=document.createElement('span');
+        s.className='mesa-mini-letter';
+        s.textContent=ch;
+        s.style.color=m.colorSurface||'#00ff41';
+        s.style.textShadow=`0 0 4px ${(m.colorSurface||'#00ff41')}88`;
+        lettersDiv.appendChild(s);
+      }
+    }
+    plateWrap.appendChild(lettersDiv);
+
+    const colorDot=document.createElement('div');
+    colorDot.style.cssText=`width:8px;height:8px;border-radius:50%;flex-shrink:0;background:${m.colorSurface||'#00ff41'};box-shadow:0 0 5px ${m.colorSurface||'#00ff41'}99;position:absolute;bottom:20px;right:7px;`;
+
+    const nameInput=document.createElement('input');
+    nameInput.className='mesa-name-input';
+    nameInput.type='text';
+    nameInput.value=m.label;
+    nameInput.maxLength=20;
+    nameInput.placeholder='Nome';
+    nameInput.onclick=(e)=>e.stopPropagation();
+    nameInput.onchange=(e)=>{
+      e.stopPropagation();
+      const val=e.target.value.trim()||('Mesa - '+m.id);
+      m.label=val;e.target.value=val;
+      if(m.id===activeMesaId)document.getElementById('previewName').textContent=val;
+    };
+
+    const status=document.createElement('div');
+    status.className='mesa-status'+(m.calc?' calculado':'');
+    status.textContent=m.calc?'✓ calculado':'sem cálculo';
+
+    div.appendChild(xBtn);
+    div.appendChild(plateWrap);
+    div.appendChild(colorDot);
+    div.appendChild(nameInput);
+    div.appendChild(status);
+    list.appendChild(div);
+  });
+}
+
+function selectMesa(id){saveCurrent();activeMesaId=id;loadMesa(id);renderSidebar();}
+
+function saveCurrent(){
+  const m=mesas.find(x=>x.id===activeMesaId);
+  if(m){
+    m.text=document.getElementById('textInput').value;
+    m.calc=lastCalc;
+    m.colorSurface=document.getElementById('colorSurface')?.value||'#00ff41';
+    m.colorBorda=document.getElementById('colorBorda')?.value||'#007a20';
+  }
+}
+
+function loadMesa(id){
+  const m=mesas.find(x=>x.id===id);if(!m)return;
+  document.getElementById('textInput').value=m.text||'';
+  document.getElementById('previewName').textContent=m.label;
+  lastCalc=m.calc||null;
+  const cs=document.getElementById('colorSurface');
+  const cb=document.getElementById('colorBorda');
+  if(cs)cs.value=m.colorSurface||'#00ff41';
+  if(cb)cb.value=m.colorBorda||'#007a20';
+  if(m.calc)showResults(m.calc);
+  else document.getElementById('results').classList.remove('show');
+  updatePreview();
+}
+
+function addMesa(){
+  saveCurrent();
+  const id=nextId++;
+  const palette=DEFAULT_COLORS[(id-1)%DEFAULT_COLORS.length];
+  mesas.push({id,label:'Mesa - '+id,text:'',calc:null,colorSurface:palette.surface,colorBorda:palette.borda});
+  activeMesaId=id;loadMesa(id);renderSidebar();
+}
+
+function removeMesa(id){
+  if(mesas.length===1){alert('Precisa ter pelo menos uma mesa.');return;}
+  mesas=mesas.filter(x=>x.id!==id);
+  if(activeMesaId===id){activeMesaId=mesas[0].id;loadMesa(activeMesaId);}
+  renderSidebar();
+}
+
+function onTextChange(){
+  const m=mesas.find(x=>x.id===activeMesaId);
+  if(m){
+    m.text=document.getElementById('textInput').value;
+    m.colorSurface=document.getElementById('colorSurface')?.value||'#00ff41';
+    m.colorBorda=document.getElementById('colorBorda')?.value||'#007a20';
+  }
+  updatePreview();renderSidebar();
+}
+
+function create3DLetter(char,px,depthPx,colorSurface,colorBorda){
+  const wrap=document.createElement('div');
+  wrap.className='letter-3d-wrap';
+  const fill=getCharFill(char);
+  const w=Math.round(px*fill*0.75);
+  const h=Math.round(px);
+  wrap.style.width=w+'px';
+  wrap.style.height=h+'px';
+  wrap.style.transformStyle='preserve-3d';
+  const fs=Math.round(px*0.78)+'px';
+
+  // Camadas: distribuídas uniformemente ao longo de depthPx em Z
+  const LAYERS=Math.max(3, Math.min(Math.round(depthPx/2), 40));
+  const step=depthPx/LAYERS;
+
+  for(let i=0;i<LAYERS;i++){
+    const layer=document.createElement('div');
+    layer.className='letter-block';
+    layer.textContent=char;
+    const z=(i*step).toFixed(1);
+    const isFront=(i===LAYERS-1);
+    // Opacidade cresce do fundo para a frente
+    const opacity=isFront?1:(0.35+0.55*(i/(LAYERS-1))).toFixed(2);
+    layer.style.cssText=`
+      position:absolute;inset:0;width:100%;height:100%;
+      font-size:${fs};font-weight:900;font-family:'Inter',sans-serif;
+      line-height:1;letter-spacing:0;
+      display:flex;align-items:center;justify-content:center;
+      transform:translateZ(${z}px);
+      opacity:${opacity};
+      color:${isFront?colorSurface:colorBorda};
+      text-shadow:${isFront?`0 0 20px ${colorSurface}cc,0 0 8px ${colorSurface}66`:'none'};
+    `;
+    wrap.appendChild(layer);
+  }
+  return wrap;
+}
+
+const LIMITS={
+  altura:{min:10,max:220,msg:'Máx. 220mm — tamanho da mesa'},
+  espessura:{min:1,max:240,msg:'Máx. 240mm de espessura'},
+};
+
+function validateAndUpdate(id,min,max){
+  const el=document.getElementById(id);
+  const hint=document.getElementById('hint-'+id);
+  const val=parseFloat(el.value);
+  if(hint){
+    if(val>max){el.value=max;hint.textContent='⚠ '+(LIMITS[id]?.msg||'Limite atingido');hint.classList.add('visible');}
+    else{hint.classList.remove('visible');hint.textContent='';}
+  }
+  onTextChange();
+}
+
+const PLATE_MM=220,PLATE_PX=260;
+
+function updatePreview(){
+  const text=document.getElementById('textInput').value.trim();
+  const altura=Math.min(parseFloat(document.getElementById('altura').value)||120,220);
+  const espessura=Math.min(parseFloat(document.getElementById('espessura').value)||20,240);
+  const colorSurface=document.getElementById('colorSurface')?.value||'#00ff41';
+  const colorBorda=document.getElementById('colorBorda')?.value||'#007a20';
+  const hint=document.getElementById('hint-textInput');
+
+  const p=document.getElementById('letterPreview');
+  if(!text){
+    p.innerHTML='<span style="font-size:13px;color:rgba(255,255,255,0.25);font-family:Inter,sans-serif;font-weight:300;">visualização aqui</span>';
+    if(hint){hint.classList.remove('visible');hint.textContent='';}
+    return;
+  }
+
+  const PLATE_MM_W=220;
+  // Escala px/mm baseada na placa: 393px = 220mm
+  const pxPerMm=393/PLATE_MM_W;
+  const letterPx=Math.round(altura*pxPerMm);
+  // depthPx: fator visual para compensar perspectiva achatada do rotateX(52deg)
+  const DEPTH_FACTOR=2.5;
+  const depthPx=Math.max(4, Math.round(espessura*pxPerMm*DEPTH_FACTOR));
+
+  // Quebrar texto em linhas que caibam na mesa (220mm de largura)
+  // Primeiro por palavras, depois por caractere se necessário
+  const words=text.split(' ');
+  const lines=[];
+  let currentLine='';
+  let currentWmm=0;
+
+  function charWmm(ch){return altura*getCharFill(ch)*0.72;}
+
+  for(const word of words){
+    const wordWmm=word.split('').reduce((s,ch)=>s+charWmm(ch),0);
+    const spaceWmm=currentLine?charWmm(' '):0;
+
+    // Palavra sozinha já passa da mesa: quebrar por caractere
+    if(wordWmm>PLATE_MM_W){
+      if(currentLine){lines.push(currentLine);currentLine='';currentWmm=0;}
+      let tmp='';let tmpW=0;
+      for(const ch of word){
+        const cw=charWmm(ch);
+        if(tmpW+cw>PLATE_MM_W){lines.push(tmp);tmp=ch;tmpW=cw;}
+        else{tmp+=ch;tmpW+=cw;}
+      }
+      if(tmp){
+        if(tmpW<=PLATE_MM_W-currentWmm){currentLine=tmp;currentWmm=tmpW;}
+        else{lines.push(tmp);currentLine='';currentWmm=0;}
+      }
+    } else if(currentLine && currentWmm+spaceWmm+wordWmm>PLATE_MM_W){
+      lines.push(currentLine);
+      currentLine=word;currentWmm=wordWmm;
+    } else {
+      if(currentLine){currentLine+=' ';currentWmm+=spaceWmm;}
+      currentLine+=word;currentWmm+=wordWmm;
+    }
+  }
+  if(currentLine)lines.push(currentLine);
+
+  // Verificar se a altura total das linhas cabe na mesa
+  // Cada linha ocupa altura + gap entre linhas
+  const lineGapMm=altura*0.15;
+  const totalHeightMm=lines.length*altura+(lines.length-1)*lineGapMm;
+  const exceedsHeight=totalHeightMm>PLATE_MM_W;
+
+  // Aviso no formulário
+  if(hint){
+    if(exceedsHeight){
+      hint.textContent=`⚠ Texto excede a mesa em altura (${Math.round(totalHeightMm)}mm em ${lines.length} linhas > 220mm). Reduza a altura ou o texto.`;
+      hint.classList.remove('info');
+      hint.classList.add('visible');
+    } else if(lines.length>1){
+      hint.textContent=`ℹ Texto quebrado em ${lines.length} linhas para caber na mesa.`;
+      hint.classList.add('visible','info');
+    } else {
+      hint.classList.remove('visible','info');
+      hint.textContent='';
+    }
+  }
+
+  p.innerHTML='';
+
+  for(const line of lines){
+    const rowDiv=document.createElement('div');
+    rowDiv.className='letter-preview-row';
+    rowDiv.style.transformStyle='preserve-3d';
+    for(const ch of line){
+      if(ch===' ')continue;
+      rowDiv.appendChild(create3DLetter(ch,letterPx,depthPx,colorSurface,colorBorda));
+    }
+    p.appendChild(rowDiv);
+  }
+}
+
+function calcular(){
+  const text=document.getElementById('textInput').value.trim();
+  if(!text){alert('Digite um texto primeiro!');return;}
+  const altura=parseFloat(document.getElementById('altura').value)||120;
+  const espessura=parseFloat(document.getElementById('espessura').value)||20;
+  const espaco=0; // fixo
+  const fontFactor=0.68; // sans-serif padrão fixo
+  const fontLabel='Sans-serif (padrão)';
+  const densidade=parseFloat(document.getElementById('material').value);
+  const materialLabel=document.getElementById('material').selectedOptions[0].text;
+  const infill=parseFloat(document.getElementById('infill').value)/100;
+  const preco=parseFloat(document.getElementById('preco').value);
+  const qtd=1; // fixo
+  let areaTotal=0;
+  for(const ch of text){
+    if(ch===' ')continue;
+    areaTotal+=altura*altura*0.7*getCharFill(ch)*fontFactor;
+  }
+  const volumeCm3=areaTotal*espessura/1000;
+  const pesoPeca=volumeCm3*densidade*infill;
+  const pesoTotal=pesoPeca*qtd;
+  const custo=(pesoTotal/1000)*preco;
+  lastCalc={text,altura,espaco,espessura,fontLabel,materialLabel,densidade,infill:infill*100,preco,qtd,volumeCm3,pesoPeca,pesoTotal,custo};
+  const m=mesas.find(x=>x.id===activeMesaId);if(m)m.calc=lastCalc;
+  showResults(lastCalc);
+  renderSidebar();
+}
+
+function showResults(d){
+  document.getElementById('rVolume').textContent=d.volumeCm3.toFixed(1)+' cm³';
+  document.getElementById('rPeso').textContent=d.pesoPeca.toFixed(1)+' g';
+  document.getElementById('rPesoTotal').textContent=d.pesoTotal.toFixed(1)+' g';
+  document.getElementById('rCusto').textContent='R$ '+d.custo.toFixed(2);
+  document.getElementById('results').classList.add('show');
+}
+
+function salvarPDF(){
+  saveCurrent();
+  const mesasComCalc=mesas.filter(m=>m.calc);
+  if(mesasComCalc.length===0){
+    calcular();saveCurrent();
+    const m2=mesas.filter(m=>m.calc);
+    if(m2.length===0){alert('Calcule ao menos uma mesa antes de gerar o PDF.');return;}
+  }
+  const btn=document.getElementById('pdfBtn');
+  btn.classList.add('saving');btn.textContent='Gerando…';
+  setTimeout(()=>{
+    try{gerarPDF();}catch(e){console.error(e);}
+    btn.classList.remove('saving');btn.classList.add('done');btn.textContent='Salvo!';
+    const t=document.getElementById('toast');t.classList.add('show');
+    setTimeout(()=>{t.classList.remove('show');btn.classList.remove('done');btn.textContent='Gerar PDF';},3000);
+  },100);
+}
+
+/* ── INIT ── */
+function init(){
+  renderSidebar();
+  loadMesa(activeMesaId);
+  applyAuthState();
+  /* Estado inicial: aba Preview ativa → campo Texto oculto no Customize */
+  var textoSec = document.getElementById('accTextoSection');
+  if (textoSec) textoSec.style.display = 'none';
+}
+document.addEventListener('DOMContentLoaded', init);
+
+function gerarPDF(){
+  const{jsPDF}=window.jspdf;
+  const doc=new jsPDF({unit:'mm',format:'a4'});
+  const W=210,H=297,ML=14,MR=14,CW=W-ML-MR;
+  const now=new Date(),data=now.toLocaleDateString('pt-BR');
+  const num='ORC-'+now.getFullYear()+String(now.getMonth()+1).padStart(2,'0')+String(now.getDate()).padStart(2,'0');
+  const mesasComCalc=mesas.filter(m=>m.calc);
+  const totalCusto=mesasComCalc.reduce((s,m)=>s+m.calc.custo,0);
+  const totalPeso=mesasComCalc.reduce((s,m)=>s+m.calc.pesoTotal,0);
+
+  doc.setFillColor(28,28,28);doc.rect(0,0,W,28,'F');
+  doc.setFillColor(55,55,55);doc.rect(0,0,W,2,'F');
+  doc.setFont('helvetica','bold');doc.setFontSize(16);doc.setTextColor(255,255,255);
+  doc.text('ORÇAMENTO',ML,17);
+  doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(140,140,140);
+  doc.text('Inkubo Tecnologia · Impressão 3D · Letra Caixa',ML,23);
+  doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(200,200,200);
+  doc.text(num,W-MR,13,{align:'right'});
+  doc.setFont('helvetica','normal');doc.setFontSize(7.5);doc.setTextColor(120,120,120);
+  doc.text('Data: '+data,W-MR,19,{align:'right'});
+  doc.text('Validade: 15 dias',W-MR,24,{align:'right'});
+
+  let y=34;
+  function secTitle(txt){
+    doc.setFont('helvetica','bold');doc.setFontSize(7);doc.setTextColor(110,110,110);
+    doc.text(txt.toUpperCase(),ML,y);
+    doc.setDrawColor(210,210,210);doc.setLineWidth(0.2);doc.line(ML,y+1,W-MR,y+1);
+    y+=7;
+  }
+
+  const n=mesasComCalc.length;
+  const cols=n<=2?n:n<=4?2:3;
+  const rows=Math.ceil(n/cols);
+  const colW=(CW-(cols-1)*4)/cols;
+  const linesPerMesa=8;
+  const blockH=10+linesPerMesa*4.8+10;
+  const totalGridH=rows*blockH+(rows-1)*5;
+  const available=H-y-30;
+  const scale=Math.min(1,available/totalGridH);
+  const fBase=scale<1?7.5*scale:8.5;
+
+  secTitle('Mesas do projeto ('+n+' mesa'+(n>1?'s':'')+')');
+
+  mesasComCalc.forEach((m,idx)=>{
+    const col=idx%cols;
+    const row=Math.floor(idx/cols);
+    const x=ML+col*(colW+4);
+    const yBlock=y+row*(blockH*scale+5);
+    const d=m.calc;
+    doc.setFillColor(246,246,246);doc.roundedRect(x,yBlock,colW,blockH*scale,2,2,'F');
+    doc.setDrawColor(220,220,220);doc.setLineWidth(0.2);doc.roundedRect(x,yBlock,colW,blockH*scale,2,2,'S');
+    doc.setFillColor(38,38,38);doc.roundedRect(x,yBlock,colW,9*scale,2,2,'F');
+    doc.setFillColor(38,38,38);doc.rect(x,yBlock+5*scale,colW,4*scale,'F');
+    doc.setFont('helvetica','bold');doc.setFontSize(fBase+0.5);doc.setTextColor(255,255,255);
+    doc.text(m.label,x+3,yBlock+5.5*scale,{maxWidth:colW-6});
+    doc.setFont('helvetica','normal');doc.setFontSize(fBase-1.5);doc.setTextColor(160,160,160);
+    doc.text('"'+d.text.slice(0,18)+(d.text.length>18?'…':'')+'"',x+3,yBlock+8.2*scale,{maxWidth:colW-6});
+    let cy=yBlock+12*scale;
+    const pairs=[
+      ['Altura',d.altura+'mm'],
+      ['Espessura',d.espessura+'mm'],
+      ['Material',d.materialLabel.split(' ')[0]],
+      ['Infill',d.infill.toFixed(0)+'%'],
+      ['Volume',d.volumeCm3.toFixed(1)+' cm³'],
+      ['Peso',d.pesoTotal.toFixed(1)+' g'],
+    ];
+    pairs.forEach(([l,v],i)=>{
+      if(i%2===0){doc.setFillColor(240,240,240);doc.rect(x+1,cy-3*scale,colW-2,4.2*scale,'F');}
+      doc.setFont('helvetica','normal');doc.setFontSize(fBase-1);doc.setTextColor(90,90,90);
+      doc.text(l,x+3,cy);
+      doc.setFont('helvetica','bold');doc.setTextColor(30,30,30);
+      doc.text(v,x+colW-3,cy,{align:'right'});
+      cy+=4.8*scale;
+    });
+    const costY=yBlock+blockH*scale-3;
+    doc.setFillColor(28,28,28);doc.rect(x+1,costY-5.5*scale,colW-2,6*scale,'F');
+    doc.setFont('helvetica','normal');doc.setFontSize(fBase-2);doc.setTextColor(140,140,140);
+    doc.text('CUSTO',x+3,costY-2.2*scale);
+    doc.setFont('helvetica','bold');doc.setFontSize(fBase+1);doc.setTextColor(255,255,255);
+    doc.text('R$ '+d.custo.toFixed(2),x+colW-3,costY-0.5*scale,{align:'right'});
+  });
+
+  y=y+rows*(blockH*scale+5)+2;
+  doc.setDrawColor(180,180,180);doc.setLineWidth(0.3);doc.line(ML,y,W-MR,y);
+  y+=5;
+  doc.setFillColor(28,28,28);doc.roundedRect(ML,y,CW,16,2,2,'F');
+  doc.setFont('helvetica','normal');doc.setFontSize(7.5);doc.setTextColor(130,130,130);
+  doc.text('CUSTO TOTAL · '+n+' mesa'+(n>1?'s':'')+' · Peso: '+totalPeso.toFixed(1)+'g',ML+4,y+7);
+  doc.setFont('helvetica','bold');doc.setFontSize(14);doc.setTextColor(255,255,255);
+  doc.text('R$ '+totalCusto.toFixed(2),W-MR-4,y+12,{align:'right'});
+  y+=22;
+  doc.setFont('helvetica','normal');doc.setFontSize(6.5);doc.setTextColor(150,150,150);
+  doc.text('* Valores estimados com base em fator de preenchimento por caractere.',ML,y);
+  doc.setDrawColor(200,200,200);doc.setLineWidth(0.2);doc.line(ML,H-10,W-MR,H-10);
+  doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(160,160,160);
+  doc.text('Inkubo Tecnologia · TM 2026',W/2,H-6,{align:'center'});
+
+  const nomeArq='orcamento_'+data.replace(/\//g,'-')+'_'+num+'.pdf';
+  doc.save(nomeArq);
+}
+</script>
+
+<!-- ── THREE.JS VIEWER ── -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/SVGLoader.js"></script>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ── state ── */
+  var initialized  = false;
+  var renderer, scene, camera, controls, gridHelper, currentModel;
+  var textDebounce = null;
+
+  /* ── DOM refs (preenchidos em initViewer) ── */
+  var panel, wrap, loadingEl, loadPct, modelName, btnRotate, dropZone, dzBox, fileInput;
+
+  /* ════════════════════════════════════════════
+     1. GERAR SVG A PARTIR DE TEXTO (em memória)
+     Usa canvas 2D para medir e montar paths reais.
+     Retorna string SVG pronta para o SVGLoader.
+  ════════════════════════════════════════════ */
+  function textToSVG(text, fontSizePx, colorHex) {
+    if (!text || !text.trim()) return null;
+
+    colorHex = colorHex || '#ffffff';
+
+    /* ── canvas temporário para medir glifos ── */
+    var cvs  = document.createElement('canvas');
+    var ctx  = cvs.getContext('2d');
+    var font = 'bold ' + fontSizePx + 'px Inter, Arial, sans-serif';
+    ctx.font = font;
+
+    var metrics  = ctx.measureText(text);
+    var textW    = metrics.width;
+    var textH    = fontSizePx * 1.2;
+    var pad      = fontSizePx * 0.1;
+    var svgW     = Math.ceil(textW + pad * 2);
+    var svgH     = Math.ceil(textH + pad * 2);
+
+    /* ── SVG com <text> — o SVGLoader lê o path ── */
+    /* Usamos foreignObject não funciona no SVGLoader.
+       Estratégia: renderizar no canvas e converter para path via getImageData
+       é pesado. A abordagem correta é gerar o SVG com <text> e deixar o
+       SVGLoader converter via seu parser interno de <text> — mas o r128 não
+       suporta <text>. Então usamos uma fonte embutida como path.
+
+       Solução leve e sem API externa:
+       Renderizamos no canvas, depois usamos potrace-like tracing via
+       marching squares simplificado — mas isso é muito pesado.
+
+       ✅ MELHOR abordagem para r128: gerar o SVG com <text> e usar
+       um segundo canvas para rasterizar → converter cada letra em
+       contornos usando a API Path2D indiretamente via offscreen canvas
+       + getImageData → marching squares leve.
+
+       Na prática para letras 3D: usamos uma abordagem híbrida:
+       renderizamos no canvas em alta res, depois percorremos pixel a pixel
+       para gerar um path grosseiro — funcional para extrusão. */
+
+    /* ABORDAGEM FINAL ESCOLHIDA:
+       Usamos canvas + fillText numa resolução 4× depois usamos
+       um tracer de contorno simples (marching squares 2D) para gerar
+       o path SVG. Leve, sem dependência, funciona no SVGLoader r128. */
+
+    var SCALE   = 4; // super-sample para borda mais suave
+    var cW      = svgW  * SCALE;
+    var cH      = svgH  * SCALE;
+    cvs.width   = cW;
+    cvs.height  = cH;
+    ctx.clearRect(0, 0, cW, cH);
+    ctx.font     = 'bold ' + (fontSizePx * SCALE) + 'px Inter, Arial, sans-serif';
+    ctx.fillStyle = '#fff';
+    ctx.textBaseline = 'top';
+    ctx.fillText(text, pad * SCALE, pad * SCALE * 0.15);
+
+    var imgData = ctx.getImageData(0, 0, cW, cH);
+    var pixels  = imgData.data;
+
+    /* grid binário: 1 = pixel preenchido */
+    var grid = new Uint8Array(cW * cH);
+    for (var i = 0; i < cW * cH; i++) {
+      grid[i] = pixels[i * 4 + 3] > 64 ? 1 : 0;
+    }
+
+    /* ── Contorno via marching squares simplificado ── */
+    /* Gera segmentos de borda como polylines no espaço canvas */
+    /* Depois converte para coordenadas SVG (/ SCALE) */
+
+    /* Para extrusão 3D, uma abordagem mais simples e robusta:
+       em vez de marching squares completo, geramos um path
+       de "outline" percorrendo os pixels de borda com
+       Moore neighborhood tracing. */
+
+    var pathD = traceBoundary(grid, cW, cH, SCALE, svgW, svgH);
+
+    if (!pathD) return null;
+
+    var svg = [
+      '<svg xmlns="http://www.w3.org/2000/svg"',
+      '  width="'  + svgW + '" height="' + svgH + '"',
+      '  viewBox="0 0 ' + svgW + ' ' + svgH + '">',
+      '<path fill="' + colorHex + '" d="' + pathD + '"/>',
+      '</svg>'
+    ].join('\n');
+
+    return svg;
+  }
+
+  /* ── Moore Neighborhood contour tracing ──
+     Percorre todos os "blobs" de pixels preenchidos e gera
+     um path SVG simplificado (union de retângulos por coluna).
+     Rápido, sem dependência externa, adequado para extrusão. */
+  function traceBoundary(grid, cW, cH, scale, svgW, svgH) {
+    /* Abordagem: column-span rects → muito eficiente para texto.
+       Para cada linha, encontra spans de pixels preenchidos
+       e gera rect path. O resultado é um path "pixelado" mas
+       quando extrudado em 3D com bevel fica excelente. */
+    var rects = [];
+    var step  = 1; // percorre pixel a pixel (já é rápido pois canvas é 4×)
+
+    for (var y = 0; y < cH; y += step) {
+      var inSpan = false;
+      var spanX  = 0;
+      for (var x = 0; x < cW + 1; x++) {
+        var filled = x < cW && grid[y * cW + x] === 1;
+        if (filled && !inSpan) {
+          inSpan = true;
+          spanX  = x;
+        } else if (!filled && inSpan) {
+          inSpan = false;
+          /* rect em coordenadas SVG */
+          var rx = spanX / scale;
+          var ry = y     / scale;
+          var rw = (x - spanX) / scale;
+          var rh = step  / scale;
+          rects.push([rx, ry, rw, rh]);
+        }
+      }
+    }
+
+    if (!rects.length) return null;
+
+    /* Converte array de rects para path D (M...Z por rect) */
+    /* Nota: rects sobrepostos criam geometria em z-fighting no SVGLoader,
+       mas para extrusão isso é invisível — o resultado visual é correto. */
+    var d = rects.map(function (r) {
+      var x = r[0], y = r[1], w = r[2], h = r[3];
+      return 'M' + x + ' ' + y +
+             'H' + (x + w) +
+             'V' + (y + h) +
+             'H' + x + 'Z';
+    }).join(' ');
+
+    return d;
+  }
+
+  /* ════════════════════════════════════════════
+     2. CONVERTER SVG STRING → MESH 3D
+  ════════════════════════════════════════════ */
+  function svgStringToMesh(svgString, extrudeDepth, colorSurface, colorBorda) {
+    var loader = new THREE.SVGLoader();
+    var data   = loader.parse(svgString);
+    var group  = new THREE.Group();
+
+    var matFront = new THREE.MeshStandardMaterial({
+      color:     new THREE.Color(colorSurface || '#9b8fe0'),
+      roughness: 0.35,
+      metalness: 0.08,
+      side:      THREE.FrontSide
+    });
+    var matSide = new THREE.MeshStandardMaterial({
+      color:     new THREE.Color(colorBorda || '#5a4fa8'),
+      roughness: 0.5,
+      metalness: 0.05,
+      side:      THREE.FrontSide
+    });
+
+    data.paths.forEach(function (path) {
+      var shapes = THREE.SVGLoader.createShapes(path);
+      shapes.forEach(function (shape) {
+        var geo = new THREE.ExtrudeGeometry(shape, {
+          depth:          extrudeDepth,
+          bevelEnabled:   true,
+          bevelThickness: extrudeDepth * 0.04,
+          bevelSize:      extrudeDepth * 0.02,
+          bevelSegments:  3
+        });
+
+        /* Separar faces frontais das laterais por materialIndex */
+        var meshFront = new THREE.Mesh(geo, [matFront, matSide]);
+        meshFront.castShadow    = true;
+        meshFront.receiveShadow = true;
+        group.add(meshFront);
+      });
+    });
+
+    if (!group.children.length) return null;
+
+    /* SVG tem Y invertido — corrigir */
+    group.scale.y = -1;
+
+    return group;
+  }
+
+  /* ════════════════════════════════════════════
+     3. PIPELINE: texto → SVG → 3D → cena
+  ════════════════════════════════════════════ */
+  function buildTextMesh() {
+    if (!initialized) return;
+
+    var text    = (document.getElementById('textInput') || {}).value || '';
+    var altura  = parseFloat((document.getElementById('altura')    || {}).value) || 120;
+    var espes   = parseFloat((document.getElementById('espessura') || {}).value) || 20;
+    var corSurf = (document.getElementById('colorSurface') || {}).value || '#9b8fe0';
+    var corBord = (document.getElementById('colorBorda')   || {}).value || '#5a4fa8';
+
+    text = text.trim();
+
+    /* limpa modelo anterior */
+    if (currentModel) {
+      scene.remove(currentModel);
+      currentModel = null;
+    }
+
+    if (!text) {
+      /* mostra drop zone se não há texto nem modelo */
+      dropZone.classList.remove('hidden');
+      if (modelName) modelName.textContent = '—';
+      return;
+    }
+
+    /* Escala: altura em mm → px para o canvas (proporcional) */
+    var fontPx   = Math.max(20, Math.min(altura * 2, 600));
+    /* depth: espessura em mm → unidades Three.js
+       Como o SVG gerado tem ~fontPx de altura, mapeamos:
+       depth = (espes / altura) * fontPx */
+    var depthUnits = (espes / Math.max(altura, 1)) * fontPx;
+
+    var svgStr = textToSVG(text, fontPx, corSurf);
+    if (!svgStr) return;
+
+    var group = svgStringToMesh(svgStr, depthUnits, corSurf, corBord);
+    if (!group) return;
+
+    dropZone.classList.add('hidden');
+    if (modelName) modelName.textContent = '"' + text + '"';
+
+    fitCamera(group);
+    scene.add(group);
+    currentModel = group;
+  }
+
+  /* ── Debounce para não reconstruir a cada tecla ── */
+  function scheduleTextBuild() {
+    clearTimeout(textDebounce);
+    textDebounce = setTimeout(buildTextMesh, 180);
+  }
+
+  /* ════════════════════════════════════════════
+     4. HOOKUP: ouve mudanças nos controles
+        (chamado após initViewer)
+  ════════════════════════════════════════════ */
+  function hookControls() {
+    ['textInput', 'altura', 'espessura', 'colorSurface', 'colorBorda'].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) {
+        el.addEventListener('input',  scheduleTextBuild);
+        el.addEventListener('change', scheduleTextBuild);
+      }
+    });
+  }
+
+  /* ════════════════════════════════════════════
+     5. THREE.JS INIT
+  ════════════════════════════════════════════ */
+  function initViewer() {
+    if (initialized) return;
+    initialized = true;
+
+    panel     = document.getElementById('panel-viewer');
+    wrap      = document.getElementById('glb-canvas-wrap');
+    loadingEl = document.getElementById('glb-loading');
+    loadPct   = document.getElementById('glb-load-pct');
+    modelName = document.getElementById('glb-model-name');
+    btnRotate = document.getElementById('glb-btn-rotate');
+    dropZone  = document.getElementById('glb-drop-zone');
+    dzBox     = document.getElementById('glb-dz-box');
+    fileInput = document.getElementById('glb-file-input');
+
+    var W = panel.offsetWidth  || 400;
+    var H = panel.offsetHeight || 300;
+
+    /* cena */
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x1c1b20);
+
+    /* câmera */
+    camera = new THREE.PerspectiveCamera(45, W / H, 0.01, 10000);
+    camera.position.set(0, 1.2, 3);
+
+    /* renderer */
+    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(W, H);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type    = THREE.PCFSoftShadowMap;
+    wrap.appendChild(renderer.domElement);
+
+    /* grid */
+    gridHelper = new THREE.GridHelper(10, 20, 0x333340, 0x28272e);
+    gridHelper.position.y = -0.001;
+    scene.add(gridHelper);
+
+    /* luzes */
+    scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+    var dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
+    dirLight.position.set(3, 6, 4);
+    dirLight.castShadow = true;
+    dirLight.shadow.mapSize.set(1024, 1024);
+    scene.add(dirLight);
+    var fill = new THREE.DirectionalLight(0xd0e8ff, 0.4);
+    fill.position.set(-4, 2, -3);
+    scene.add(fill);
+    var back = new THREE.DirectionalLight(0xffd0a0, 0.25);
+    back.position.set(0, -3, 2);
+    scene.add(back);
+
+    /* controles */
+    controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping   = true;
+    controls.dampingFactor   = 0.07;
+    controls.minDistance     = 0.01;
+    controls.maxDistance     = 10000;
+    controls.autoRotate      = true;
+    controls.autoRotateSpeed = 1.2;
+
+    btnRotate.addEventListener('click', function () {
+      controls.autoRotate = !controls.autoRotate;
+      btnRotate.classList.toggle('active', controls.autoRotate);
+    });
+
+    /* upload / drag-drop */
+    dzBox.addEventListener('click', function () { fileInput.click(); });
+    fileInput.addEventListener('change', function (e) {
+      var f = e.target.files[0];
+      if (f) dispatchFile(f);
+      fileInput.value = '';
+    });
+    panel.addEventListener('dragover', function (e) {
+      e.preventDefault();
+      dropZone.classList.add('drag-over');
+    });
+    panel.addEventListener('dragleave', function (e) {
+      if (!e.relatedTarget || !panel.contains(e.relatedTarget))
+        dropZone.classList.remove('drag-over');
+    });
+    panel.addEventListener('drop', function (e) {
+      e.preventDefault();
+      dropZone.classList.remove('drag-over');
+      var f = e.dataTransfer.files[0];
+      if (f) dispatchFile(f);
+    });
+
+    /* resize */
+    window.addEventListener('resize', onResize);
+
+    /* loop */
+    (function animate() {
+      requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    })();
+
+    /* hookup dos controles de texto */
+    hookControls();
+
+    /* se já tem texto digitado, gera imediatamente */
+    buildTextMesh();
+  }
+
+  function onResize() {
+    if (!renderer || !panel) return;
+    var w = panel.offsetWidth, h = panel.offsetHeight;
+    if (!w || !h) return;
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+  }
+
+  /* ── fitCamera ── */
+  function fitCamera(object) {
+    var box    = new THREE.Box3().setFromObject(object);
+    var center = new THREE.Vector3();
+    var size   = new THREE.Vector3();
+    box.getCenter(center);
+    box.getSize(size);
+    object.position.sub(center);
+
+    var maxDim = Math.max(size.x, size.y, size.z);
+    if (maxDim === 0) maxDim = 1;
+    var fovRad = camera.fov * Math.PI / 180;
+    var dist   = Math.abs(maxDim / Math.sin(fovRad / 2)) * 0.9;
+
+    camera.position.set(dist * 0.6, dist * 0.5, dist);
+    camera.near = dist / 200;
+    camera.far  = dist * 200;
+    camera.updateProjectionMatrix();
+
+    controls.target.set(0, 0, 0);
+    controls.minDistance = dist * 0.01;
+    controls.maxDistance = dist * 10;
+    controls.update();
+
+    gridHelper.position.y = -(size.y / 2);
+    gridHelper.scale.setScalar(maxDim);
+  }
+
+  function setModel(object) {
+    if (currentModel) { scene.remove(currentModel); currentModel = null; }
+    object.traverse(function (c) {
+      if (c.isMesh) { c.castShadow = true; c.receiveShadow = true; }
+    });
+    fitCamera(object);
+    scene.add(object);
+    currentModel = object;
+    loadingEl.classList.add('hidden');
+    dropZone.classList.add('hidden');
+  }
+
+  function startLoad(name) {
+    loadingEl.classList.remove('hidden');
+    if (loadPct) loadPct.textContent = '0';
+    dropZone.classList.add('hidden');
+    if (modelName) modelName.textContent = name;
+  }
+
+  function showError(msg) {
+    loadingEl.classList.add('hidden');
+    dropZone.classList.remove('hidden');
+    if (modelName) modelName.textContent = '—';
+    alert(msg);
+  }
+
+  /* ── STL ── */
+  function loadSTL(file) {
+    startLoad(file.name);
+    var url = URL.createObjectURL(file);
+    var loader = new THREE.STLLoader();
+    loader.load(url,
+      function (geo) {
+        geo.computeVertexNormals();
+        var mat  = new THREE.MeshStandardMaterial({ color: 0x9b8fe0, roughness: 0.4, metalness: 0.15, side: THREE.DoubleSide });
+        var mesh = new THREE.Mesh(geo, mat);
+        var grp  = new THREE.Group();
+        grp.add(mesh);
+        setModel(grp);
+        URL.revokeObjectURL(url);
+      },
+      function (xhr) {
+        if (xhr.lengthComputable && loadPct)
+          loadPct.textContent = Math.round(xhr.loaded / xhr.total * 100);
+      },
+      function (err) {
+        console.error(err);
+        showError('Erro ao carregar STL.');
+        URL.revokeObjectURL(url);
+      }
+    );
+  }
+
+  /* ── SVG extrudado (arquivo) ── */
+  function loadSVG(file) {
+    startLoad(file.name);
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      try {
+        var loader = new THREE.SVGLoader();
+        var data   = loader.parse(e.target.result);
+        var group  = new THREE.Group();
+        var palette = [0x7c6fcd, 0x9b8fe0, 0xe8a0c0, 0x7ecdc8, 0xa0c0e8, 0xe8c87a];
+        var ci = 0;
+        data.paths.forEach(function (path) {
+          var shapes = THREE.SVGLoader.createShapes(path);
+          shapes.forEach(function (shape) {
+            var geo = new THREE.ExtrudeGeometry(shape, {
+              depth: 20, bevelEnabled: true,
+              bevelThickness: 1, bevelSize: 0.5, bevelSegments: 2
+            });
+            var fillColor = path.userData && path.userData.style && path.userData.style.fill;
+            var color;
+            if (fillColor && fillColor !== 'none') {
+              try { color = new THREE.Color(fillColor); } catch(e2) { color = new THREE.Color(palette[ci % palette.length]); }
+            } else { color = new THREE.Color(palette[ci % palette.length]); }
+            ci++;
+            group.add(new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ color: color, roughness: 0.4, metalness: 0.1, side: THREE.DoubleSide })));
+          });
+        });
+        if (!group.children.length) throw new Error('Nenhum shape encontrado.');
+        group.scale.y = -1;
+        setModel(group);
+      } catch (err) {
+        console.error(err);
+        showError('Erro ao carregar SVG: ' + err.message);
+      }
+    };
+    reader.onerror = function () { showError('Erro ao ler o arquivo SVG.'); };
+    reader.readAsText(file);
+  }
+
+  /* ── dispatcher ── */
+  function dispatchFile(file) {
+    var ext = file.name.split('.').pop().toLowerCase();
+    if (ext === 'stl')      loadSTL(file);
+    else if (ext === 'svg') loadSVG(file);
+    else alert('Formato não suportado.\nUse: STL, SVG');
+  }
+
+  /* ── switchTab ── */
+  window.switchTab = function (tab) {
+    var tabPreview = document.getElementById('tab-preview');
+    var tabViewer  = document.getElementById('tab-viewer');
+    var panelPrev  = document.getElementById('panel-preview');
+    var panelView  = document.getElementById('panel-viewer');
+    var textoSec   = document.getElementById('accTextoSection');
+
+    if (tab === 'preview') {
+      tabPreview.classList.add('active');
+      tabViewer.classList.remove('active');
+      panelPrev.style.display = '';
+      panelView.classList.remove('active');
+      /* No Preview, o campo Texto vive na área de preview — oculta no Customize */
+      if (textoSec) textoSec.style.display = 'none';
+    } else {
+      tabViewer.classList.add('active');
+      tabPreview.classList.remove('active');
+      panelPrev.style.display = 'none';
+      panelView.classList.add('active');
+      /* No Viewer, mostra o campo Texto no Customize para alimentar o 3D */
+      if (textoSec) textoSec.style.display = '';
+      setTimeout(function () { initViewer(); onResize(); }, 30);
+    }
+  };
+
+})();
+</script>
+
+</body>
